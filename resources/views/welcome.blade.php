@@ -1,0 +1,363 @@
+@extends('layouts.app')
+
+@section('styles')
+    <style>
+        /* ===== A4 Print Setup ===== */
+        @page {
+            size: A4 portrait;
+            margin: 20mm;
+        }
+
+        @media print {
+            .print-actions {
+                display: none !important;
+            }
+
+            body {
+                background: white;
+            }
+
+            .a4-sheet {
+                box-shadow: none;
+                margin: 0;
+                width: auto;
+                min-height: auto;
+                border: none;
+            }
+        }
+
+        /* ===== Screen Preview ===== */
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background: #f5f7fa;
+            color: #111827;
+            /* gray-900 */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-family: "Noto Serif Bengali", "Noto Sans Bengali", "SolaimanLipi", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Sans Serif";
+            line-height: 1.55;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .a4-sheet {
+            background: #fff;
+            width: 210mm;
+            min-height: 297mm;
+            /* visual margin inside page */
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e5e7eb;
+            /* gray-200 */
+        }
+
+        /* ===== Typography ===== */
+        .title {
+            text-align: center;
+            font-weight: 700;
+            font-size: 22px;
+            margin: 0 0 4px 0;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-weight: 600;
+            margin: 0 0 2px 0;
+        }
+
+        .meta {
+            text-align: center;
+            margin: 8px 0 20px 0;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        h2.section {
+            font-size: 18px;
+            margin: 18px 0 8px 0;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #e5e7eb;
+            font-weight: 700;
+        }
+
+        h3.subsection {
+            font-size: 16px;
+            margin: 14px 0 6px 0;
+            font-weight: 700;
+        }
+
+        p {
+            margin: 6px 0;
+        }
+
+        /* ===== Lists & Tables ===== */
+        ol,
+        ul {
+            margin: 6px 0 10px 20px;
+        }
+
+        li {
+            margin: 4px 0;
+        }
+
+        .priority-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 8px 0 12px 0;
+            font-size: 14px;
+        }
+
+        .priority-table th,
+        .priority-table td {
+            border: 1px solid #e5e7eb;
+            padding: 8px 10px;
+            text-align: left;
+        }
+
+        .priority-table thead th {
+            background: #f3f4f6;
+            /* gray-100 */
+            font-weight: 700;
+        }
+
+        .note-box {
+            background: #f9fafb;
+            border-left: 3px solid #111827;
+            padding: 10px 12px;
+            margin: 8px 0 12px 0;
+            font-size: 14px;
+        }
+
+        .formula {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            background: #f9fafb;
+            border: 1px dashed #d1d5db;
+            /* gray-300 */
+            padding: 8px 10px;
+            border-radius: 6px;
+            display: inline-block;
+            margin: 6px 0;
+        }
+
+        .signature {
+            margin-top: 28px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .signature .sig-block {
+            text-align: right;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .section-block {
+            page-break-inside: avoid;
+        }
+    </style>
+@endsection
+
+@section('content')
+    <div class="container mx-auto mb-12">
+        <section class="a4-sheet p-8 lg:p-12">
+            <div class="w-full">
+                <div class="flex justify-center mb-2">
+                    <img src="{{ asset('logo.png') }}" alt="" width="80">
+                </div>
+                <h1 class="title">রাজশাহী বিশ্ববিদ্যালয়</h1>
+                <p class="subtitle">প্রভোস্ট কাউন্সিল</p>
+                <p class="subtitle">রাজশাহী বিশ্ববিদ্যালয়ের আবাসিক হলসমূহে সিট বরাদ্দ সংক্রান্ত নীতিমালা</p>
+                @php
+                    $locale = 'bn_BD';
+                    $date = new DateTime();
+
+                    $formatter = new IntlDateFormatter(
+                        $locale,
+                        IntlDateFormatter::FULL,
+                        IntlDateFormatter::NONE,
+                        'Asia/Dhaka',
+                        IntlDateFormatter::GREGORIAN,
+                        'MMMM y', // MMMM for full month name, y for year
+                    );
+                @endphp
+                {{-- //current month in bangla --}}
+                <p class="meta">{{ $formatter->format($date) }}</p>
+            </div>
+
+            <div class="section-block">
+                <p>রাজশাহী বিশ্ববিদ্যালয়ের আবাসিক হল সমূহে একটি ন্যায্য এবং সুশৃঙ্খল বরাদ্দ প্রক্রিয়া নিশ্চিত করার
+                    পাশাপাশি হলের মধ্যে শৃঙ্খলা ও বাসযোগ্য পরিবেশ বজায় রাখার লক্ষ্যে নিম্নোক্ত নীতিমালার আলোকে আবাসিক
+                    সুবিধার জন্য রাজশাহী বিশ্ববিদ্যালয়ের শিক্ষার্থীদের আবেদন আহ্বান করা যাচ্ছে।</p>
+            </div>
+
+            <h2 class="section">১. শর্তসমূহ</h2>
+            <ul>
+                <li>রাজশাহী বিশ্ববিদ্যালয়ে অধ্যয়নরত স্নাতক (২য় থেকে ৪র্থ বর্ষ) এবং স্নাতকোত্তর প্রোগ্রামে নিবন্ধিত
+                    শিক্ষার্থীরাই আবেদন করতে পারবে।</li>
+                <li>প্রণীত নীতিমালার আলোকে আইবিএ-এর ছাত্রছাত্রীদের মধ্য থেকে ফাঁকা সিটের সর্বোচ্চ ১% বরাদ্দ দেওয়া হবে।
+                </li>
+                <li>কোনো শিক্ষার্থী আন্ডারগ্র্যাজুয়েট সম্পন্ন করে নিয়মিত ব্যাচের সঙ্গে মাস্টার্সে ভর্তি না হলে তার সিট
+                    বাতিল বলে গণ্য হবে।</li>
+                <li>শিক্ষার্থীর মাস্টার্সের চূড়ান্ত পরীক্ষা (ইন্টার্নশিপ/ফিল্ডওয়ার্ক/প্রজেক্ট/থিসিস [লিখিত ও
+                    মৌখিক]/ব্যবহারিক/ভাইভা ইত্যাদি) সমাপ্তির ১৫ (পনের) দিনের মধ্যে হল কর্তৃপক্ষের নিকট তার সিট বুঝিয়ে
+                    দিয়ে হল ত্যাগ করতে হবে।</li>
+                <li>বরাদ্দপ্রাপ্ত শিক্ষার্থী কর্তৃপক্ষের অনুমতি ব্যতীত কোনোভাবেই কক্ষ বা সিট পরিবর্তন করতে পারবে না।
+                </li>
+                <li>পরীক্ষার ফল প্রকাশিত না হওয়া পর্যন্ত কোনো শিক্ষার্থীকে পরবর্তী বর্ষের/শ্রেণির শিক্ষার্থী হিসেবে গণ্য
+                    করা হবে না।</li>
+                <li>কোনো শিক্ষার্থী শৃঙ্খলা পরিপন্থী কাজে নিয়োজিত থাকলে, মাদকাসক্ত হলে অথবা চাঁদাবাজির সঙ্গে যুক্ত থাকলে
+                    তাৎক্ষণিকভাবে তার সিট বাতিল করা হবে। শাস্তিপ্রাপ্ত শিক্ষার্থী তার ছাত্রজীবনে পুনরায় হলে আবাসনের জন্য
+                    আবেদন করতে পারবে না।</li>
+                <li>হলের শিক্ষার্থীদের এবং স্টাফদের প্রতি যেকোনো ধরনের হয়রানি অথবা অসদাচরণ করলে তাৎক্ষণিক শাস্তিমূলক
+                    ব্যবস্থা নেওয়া হবে।</li>
+                <li>প্রযোজ্য ক্ষেত্রে, বিশ্ববিদ্যালয়ের স্বাভাবিক ক্লাস, পরীক্ষা চলাকালীন সিট বরাদ্দপ্রাপ্ত কোনো
+                    শিক্ষার্থী হল কর্তৃপক্ষের পূর্বানুমতি বা গ্রহণযোগ্য কারণ ব্যতীত একটানা ৬০ দিনের বেশি অনুপস্থিত থাকলে
+                    তার সিট বাতিল বলে গণ্য হবে। এ ক্ষেত্রে সিট পুনঃবরাদ্দের জন্য ৫০০ টাকা জরিমানা প্রদানপূর্বক
+                    প্রাধ্যক্ষের নিকট আবেদন করা যাবে। জরিমানা প্রদানপূর্বক সর্বোচ্চ ৩ বার পুনঃবরাদ্দের জন্য আবেদন করা
+                    যাবে।</li>
+                <li>মিথ্যা তথ্য দিয়ে সিট বরাদ্দ নিলে অথবা একজনের নামে সিট বরাদ্দ নিয়ে অন্যজন অবস্থান করলে এবং তা
+                    পরবর্তীতে প্রমাণিত হলে সংশ্লিষ্ট শিক্ষার্থীর সিট তাৎক্ষণিকভাবে বাতিল করা হবে।</li>
+                <li>হলে কোনো ধরনের রাজনৈতিক ব্লক বা রাজনৈতিক কক্ষ তৈরির চেষ্টা করলে সংশ্লিষ্ট শিক্ষার্থীদের সিট বাতিল
+                    করা হবে।</li>
+                <li>সিট বরাদ্দের ক্ষেত্রে কর্তৃপক্ষের সিদ্ধান্তই চূড়ান্ত বলে গণ্য হবে।</li>
+                <li class="muted">বিশ্ববিদ্যালয় প্রয়োজন অনুযায়ী এই নীতিমালা সংশোধন করার অধিকার সংরক্ষণ করে।</li>
+            </ul>
+
+            <h2 class="section">২. আবেদন প্রক্রিয়া</h2>
+            <ul>
+                <li>সকল হলের জন্য যোগ্য শিক্ষার্থীদের নিজ নিজ হল থেকে আগামী <strong>১৭/০৮/২০২৫</strong> থেকে
+                    <strong>২৫/০৮/২০২৫</strong> তারিখ পর্যন্ত <strong>অনলাইনে</strong> আবেদন করতে হবে। আবেদনের লিংক: <a
+                        href="https://csc.ru.ac.bd/residency/login" rel="noopener"
+                        class="text-blue-500 underline">https://csc.ru.ac.bd/residency/login</a>
+                </li>
+                <li>অনলাইনে আবেদন করার সময় হলের নামের সঙ্গে প্রদর্শিত একাউন্ট নম্বরে বিবিধ ফরমে ৫০ টাকা <strong>অগ্রণী
+                        ব্যাংক, রাবি শাখায়</strong> জমা দিতে হবে। পূরণকৃত আবেদন ফরম, বিবিধ রশিদ, এবং প্রয়োজনীয় কাগজপত্র
+                    নিজ নিজ হলে <strong>২৬/০৮/২০২৫</strong> তারিখের মধ্যে জমা দিতে হবে।</li>
+                <li>প্রদানকৃত সমস্ত তথ্য হল প্রশাসন যাচাই করবে। আবেদনের সময় কোনো ভুল বা মিথ্যা তথ্য দিলে আবেদন বাতিল বলে
+                    গণ্য হবে।</li>
+                <li>আবেদনকারী শিক্ষার্থীদের সাক্ষাৎকারের জন্য ডাকা হবে। সাক্ষাৎকারের সময় সমস্ত কাগজপত্রের মূলকপি সঙ্গে
+                    নিয়ে আসতে হবে।</li>
+                <li>আবেদনকৃত শিক্ষার্থীদের মেধা, জ্যেষ্ঠতা, এবং এক্সট্রা/কো-কারিকুলার কার্যক্রমের ভিত্তিতে একটি তালিকা
+                    প্রকাশ করা হবে।</li>
+                <li>আসন ফাঁকা থাকা সাপেক্ষে প্রকাশিত তালিকা থেকে নির্দিষ্ট সময়ের মধ্যে হলে ভর্তি প্রক্রিয়া সম্পন্ন করতে
+                    হবে।</li>
+            </ul>
+
+            <h2 class="section">৩. প্রয়োজনীয় ডকুমেন্টস</h2>
+            <ul>
+                <li>সাম্প্রতিক তোলা পাসপোর্ট সাইজের ছবি (১ কপি)।</li>
+                <li>বিশ্ববিদ্যালয়ের পরিচয়পত্রের ফটোকপি।</li>
+                <li>বিশ্ববিদ্যালয়ের সকল ট্রান্সক্রিপ্ট ও সার্টিফিকেটের ফটোকপি।</li>
+                <li>স্থায়ী ঠিকানার প্রমাণ (জাতীয় পরিচয়পত্র)।</li>
+                <li>এক্সট্রা/কো-কারিকুলার কার্যক্রমের বিভিন্ন প্রতিযোগিতায় সাফল্যের স্বীকৃতি (সার্টিফিকেট/মেডেল)
+                    (অংশগ্রহণের সার্টিফিকেট গ্রহণযোগ্য নয়)।</li>
+            </ul>
+
+            <h2 class="section">৪. সিট বরাদ্দের নীতিমালা</h2>
+            <div class="note-box">সিট বরাদ্দ কার্যক্রমে স্বচ্ছতা, ন্যায়তা ও অগ্রাধিকারের ভিত্তিতে শিক্ষার্থীদের যথাযথ
+                মূল্যায়ন নিশ্চিত করার জন্য নিম্নোক্ত নীতিমালা অনুসরণ করা হবে:</div>
+
+            <h3 class="subsection">৪.১. সিনিয়র শিক্ষার্থীদের অগ্রাধিকার</h3>
+            <table class="priority-table" aria-label="অগ্রাধিকার স্তর">
+                <thead>
+                    <tr>
+                        <th>শ্রেণী</th>
+                        <th>অগ্রাধিকার স্তর</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>স্নাতকোত্তর</td>
+                        <td>সর্বোচ্চ</td>
+                    </tr>
+                    <tr>
+                        <td>স্নাতক ৪র্থ বর্ষ</td>
+                        <td>উচ্চ</td>
+                    </tr>
+                    <tr>
+                        <td>স্নাতক ৩য় বর্ষ</td>
+                        <td>মাঝারি</td>
+                    </tr>
+                    <tr>
+                        <td>স্নাতক ২য় বর্ষ</td>
+                        <td>সীমিত</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 class="subsection">৪.২. সেশনভিত্তিক অগ্রাধিকার (Session-to-Session ভিত্তি)</h3>
+            <p>একই বর্ষ বা সেমিস্টারের একাধিক শিক্ষার্থী আবেদন করলে, তাদের মধ্যে "Session-to-Session" ভিত্তিতে
+                অগ্রাধিকার নির্ধারণ করা হবে। অর্থাৎ, যে শিক্ষার্থীর একাডেমিক সেশন তুলনামূলকভাবে পুরনো, সে সিট বরাদ্দে
+                অগ্রাধিকার পাবে।</p>
+            <div class="note-box">
+                <strong>উদাহরণ:</strong> তিনজন ৩য় বর্ষের শিক্ষার্থী আবেদন করেছে — শিক্ষার্থী A: ২০২০-২১ সেশন, শিক্ষার্থী
+                B: ২০২১-২২ সেশন, শিক্ষার্থী C: ২০২২-২৩ সেশন।
+                এই ক্ষেত্রে অগ্রাধিকার ক্রম: A &gt; B &gt; C।
+            </div>
+
+            <h3 class="subsection">৪.৩. অতিরিক্ত আবেদনকারীর ক্ষেত্রে নির্বাচন</h3>
+            <p>নির্ধারিত সিটসংখ্যার তুলনায় যদি কোনো বর্ষ বা সেমিস্টারে আবেদনকারীর সংখ্যা বেশি হয়, তবে সর্বশেষ অনুষ্ঠিত
+                পরীক্ষার ফলাফল (GPA/SGPA/YGPA/CGPA) থেকে <strong>৪৭</strong> নম্বর এবং অতিরিক্ত পাঠক্রমিক কার্যক্রম
+                (Extra-Curricular Activities) থেকে <strong>৩</strong> নম্বর—মোট <strong>৫০</strong> নম্বরের ভিত্তিতে
+                অগ্রাধিকার নির্ধারণ করে সিট বরাদ্দ করা হবে।</p>
+            <div class="formula" aria-label="স্কোর গণনার সূত্র">
+                আবেদনকারীর স্কোর = (আবেদনকারীর সর্বশেষ GPA/SGPA/YGPA/CGPA ÷ একই রেজাল্ট সিটের সর্বোচ্চ
+                GPA/SGPA/YGPA/CGPA) × ৪৭ + এক্সট্রা কা. (সর্বোচ্চ ৩)
+            </div>
+            <div class="note-box">
+                <strong>উদাহরণ:</strong> শিক্ষার্থী A-এর GPA: ৩.৪২, সর্বোচ্চ GPA: ৩.৮৮, এক্সট্রা কা.: ৩ ⇒ স্কোর ≈ ৪৪.৪৩।
+            </div>
+
+            <h3 class="subsection">৪.৪. বিশেষ ক্যাটাগরির জন্য সিট সংরক্ষণ</h3>
+            <p>মেধাবী ও অর্থনৈতিকভাবে অসচ্ছল, প্রতিবন্ধী ও নৃ-গোষ্ঠীভুক্ত শিক্ষার্থীদের জন্য মোট সিটের
+                <strong>১০%</strong> সংরক্ষিত থাকবে। এই সংরক্ষিত সিট বরাদ্দে সংশ্লিষ্ট শিক্ষার্থীদের আবেদন ও যাচাই-বাছাই
+                শেষে বরাদ্দ দেওয়া হবে।
+            </p>
+
+            <h3 class="subsection">৪.৫. এক্সট্রা/কো-কারিকুলার কার্যক্রমের নম্বর প্রদান</h3>
+            <p>আন্তর্জাতিক, জাতীয় ও বিশ্ববিদ্যালয় পর্যায়ের বিভিন্ন প্রতিযোগিতায় সাফল্যের স্বীকৃতি (সনদ/মেডেল) বিবেচনায়
+                নম্বর প্রদান করা হবে: আন্তর্জাতিক—৩, জাতীয়—২, বিশ্ববিদ্যালয়—১। একাধিক সনদ/মেডেলের ক্ষেত্রে প্রাপ্য
+                নম্বরগুলোর যোগফল গণ্য হবে, তবে সর্বোচ্চ ৩-এর বেশি হবে না।</p>
+            <p>এক্সট্রা/কো-কারিকুলার কার্যক্রমের অংশ হিসেবে <strong>সাংবাদিকতা/বি.এন.সি.সি./রোভার স্কাউট</strong> হিসেবে
+                কাজের অভিজ্ঞতা থাকলে অতিরিক্ত ১ নম্বর প্রযোজ্য (প্রমাণপত্র আবশ্যক)। তবু সব মিলিয়ে সর্বোচ্চ ৩ নম্বরই গণ্য
+                হবে।</p>
+            <div class="note-box">
+                <strong>উদাহরণ:</strong> জাতীয় পর্যায়ের ১টি সার্টিফিকেট (২), বিশ্ববিদ্যালয় পর্যায়ের ১টি সার্টিফিকেট (১)
+                এবং সাংবাদিকতার প্রমাণপত্র (১) থাকলে মোট ২+১+১ = ৪ হলেও সর্বোচ্চ গণ্য হবে ৩।
+            </div>
+
+            <div class="signature">
+                <div class="sig-block">
+                    <div>প্রফেসর ড. শরমীন হামিদ</div>
+                    <div>আহ্বায়ক, প্রাধ্যক্ষ পরিষদ</div>
+                    <div>রাজশাহী বিশ্ববিদ্যালয়, রাজশাহী</div>
+                </div>
+            </div>
+
+            <footer class="muted" style="margin-top: 16px;">
+                নোট: বিশ্ববিদ্যালয় প্রয়োজন অনুযায়ী এই নীতিমালা সংশোধন করার অধিকার সংরক্ষণ করে।
+            </footer>
+
+            <div class="text-center">
+                @if (auth()->check())
+                    <a href="{{ route('student.dashboard') }}"
+                        class="inline-block mt-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                        Dashboard
+                    </a>
+                @else
+                    <a href="{{ route('login') }}"
+                        class="inline-block mt-6 px-12 py-2 bg-blue-600 hover:bg-blue-800 text-white rounded hover:bg-blue-700 transition">
+                        Login
+                    </a>
+                @endif
+            </div>
+        </section>
+    </div>
+@endsection
