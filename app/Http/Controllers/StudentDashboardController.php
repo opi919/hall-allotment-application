@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bill;
 use App\Models\Department;
 use App\Models\Hall;
 use App\Models\UserDetails;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Mpdf\Config\ConfigVariables;
+use Mpdf\Config\FontVariables;
+use Mpdf\Mpdf;
 
 class StudentDashboardController extends Controller
 {
@@ -16,7 +21,11 @@ class StudentDashboardController extends Controller
             return redirect()->route('student.form');
         }
 
-        return view('student.dashboard', $userDetails);
+        $bill = Bill::where('username', auth()->user()->username)->first();
+        if (!$bill) {
+            return redirect()->route('student.form');
+        }
+        return view('student.dashboard', compact('userDetails', 'bill'));
     }
 
     public function showForm()
@@ -77,8 +86,59 @@ class StudentDashboardController extends Controller
             'roverscout_certificate' => 'nullable|in:yes,no',
         ]);
 
-        UserDetails::create($request->all());
+        DB::beginTransaction();
+        try {
+            UserDetails::create($request->all());
 
-        return redirect()->route('student.dashboard')->with('success', 'Form submitted successfully!');
+            $bill = new Bill();
+            $bill->bill_id = time() . rand(100, 999);
+            $bill->username = $request->username;
+            $bill->amount = 55;
+            $bill->save();
+
+            DB::commit();
+            return redirect()->route('student.dashboard')->with('success', 'Form submitted successfully!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Failed to submit form.');
+        }
+    }
+
+    public function downloadForm()
+    {
+        $user = auth()->user();
+        $details = UserDetails::where('username', $user->username)->first();
+        $bill = Bill::where('username', $user->username)->first();
+
+        $html = view('pdf.application-form', compact('user', 'details', 'bill'))->render();
+
+        $defaultConfig = (new ConfigVariables())->getDefaults();
+        $fontDirs = $defaultConfig['fontDir'];
+
+        $fontConfig = (new FontVariables())->getDefaults();
+        $fontData = $fontConfig['fontdata'];
+
+        $mpdf = new Mpdf([
+            'mode' => 'utf-8',
+            'format' => 'A4',
+            'showWatermarkImage' => true,
+
+            'fontDir' => array_merge($fontDirs, [
+                public_path('fonts'),
+            ]),
+
+            'fontdata' => $fontData + [
+                'kalpurush' => [
+                    'R' => 'kalpurush.ttf',
+                    'useOTL' => 0xFF,
+                    'useKashida' => 75,
+                ],
+            ],
+        ]);
+
+        $mpdf->SetWatermarkImage(public_path('logo.png'), 0.1, 'D');
+        $mpdf->WriteHTML($html);
+
+        return $mpdf->Output('application-form.pdf', 'D'); // Download
     }
 }
