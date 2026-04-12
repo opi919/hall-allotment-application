@@ -39,12 +39,8 @@ class StudentDashboardController extends Controller
             return redirect()->route('student.dashboard')->with('error', 'You have already submitted the form.For changes, go to edit information section.');
         }
 
-        $department = strtolower($user->department);
+        $department = strtolower(str_replace('&', 'and', $user->department));
         $department = Department::where('name', $department)->first();
-        if (!$department) {
-            $department = str_replace('&', 'and', $user->department);
-            $department = Department::where('name', $department)->first();
-        }
 
         $data['username'] = $user->username;
         $data['name'] = $user->name;

@@ -14,9 +14,15 @@
                     </div>
                 </a>
 
-                <form action="{{ route('logout') }}" method="POST" id="logout-form" class="hidden">
-                    @csrf
-                </form>
+                @if (auth()->check() && auth()->user()->isAdmin())
+                    <form action="{{ route('admin.logout') }}" method="POST" id="logout-form" class="hidden">
+                        @csrf
+                    </form>
+                @elseif(auth()->check())
+                    <form action="{{ route('logout') }}" method="POST" id="logout-form" class="hidden">
+                        @csrf
+                    </form>
+                @endif
 
                 @if (auth()->check())
                     <!-- Desktop Menu -->

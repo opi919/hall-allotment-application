@@ -67,7 +67,7 @@
                                 <div>
                                     @if ($bill->payment_status != 1)
                                         <a href="{{ route('payment.init', $bill->id) }}"
-                                            class="ml-4 px-6 py-2 bg-red-600 text-white rounded-lg text-sm font-medium">
+                                            class="ml-4 px-6 py-2 bg-red-600 text-white rounded-lg text-sm font-medium mr-2">
                                             Pay Now
                                         </a>
                                     @endif

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\StudentDashboardController;
 use App\Http\Controllers\StudentLoginController;
@@ -27,4 +28,16 @@ Route::controller(StudentDashboardController::class)->middleware('auth')->group(
 Route::controller(PaymentController::class)->middleware('auth')->group(function () {
     Route::get('/init-payment/{id}', 'initPayment')->name('payment.init');
     Route::get('/confirm-payment/{id}', 'confirmPayment')->name('payment.confirm');
+});
+
+
+//admin routes
+Route::prefix('admin')->controller(AdminController::class)->group(function () {
+    Route::get('/login', 'showLoginForm')->name('admin.login');
+    Route::post('/login', 'login')->name('admin.login.submit');
+    Route::post('/logout', 'logout')->middleware('auth')->name('admin.logout');
+});
+
+Route::prefix('admin')->controller(AdminController::class)->middleware(['auth', 'admin'])->group(function () {
+    Route::get('/dashboard', 'dashboard')->name('admin.dashboard');
 });
