@@ -20,7 +20,7 @@
         <img src="{{ public_path('logo.png') }}" alt="University Logo" style="display: block; width: 80px;">
     </div>
     <h2 style="text-align: center;margin-top:0px;margin-bottom:0px;font-weight: normal;">University of Rajshahi</h2>
-    <h2 style="text-align: center; margin-bottom: 20px;">Hall Allotment Application</h2>
+    <h2 style="text-align: center; margin-bottom: 20px;margin-top:5px;">Hall Allotment Application</h2>
 
     <h3 style="margin-top:10px;">Personal Information</h3>
 
@@ -51,6 +51,10 @@
                     <tr>
                         <td><strong>Mobile</strong></td>
                         <td>{{ $details->mobile ?? '-' }}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 40%"><strong>Relatives in Rajshahi?</strong></td>
+                        <td style="text-transform: capitalize">{{ $details->relatives_in_rajshahi ?? '-' }}</td>
                     </tr>
                 </table>
             </td>
@@ -93,6 +97,10 @@
                             </td>
                         </tr>
                     @endif
+                    <tr>
+                        <td style="width: 40%"><strong>Home Inside Rajshahi City?</strong></td>
+                        <td style="text-transform: capitalize">{{ $details->is_home_in_rajshahi ?? '-' }}</td>
+                    </tr>
                 </table>
             </td>
         </tr>
@@ -112,7 +120,7 @@
                 <strong>Name</strong> : {{ $details->emergency_contact_name ?? '-' }}
             </td>
             <td>
-                <strong>Relationship</strong> : {{ $details->emergency_contact_relation ?? '-' }}
+                <strong>Relation</strong> : {{ $details->emergency_contact_relation ?? '-' }}
             </td>
             <td>
                 <strong>Mobile</strong> : {{ $details->emergency_contact_no ?? '-' }}
@@ -125,31 +133,22 @@
     <table width="100%" border="1" cellpadding="6" cellspacing="0" style="border-collapse: collapse;">
         <tr>
             <td><strong>Bill ID</strong></td>
-            <td>{{ $bill->bill_id ?? '-' }}</td>
+            <td style="width: 30%">{{ $bill->bill_id ?? '-' }}</td>
         </tr>
         <tr>
             <td><strong>Amount</strong></td>
-            <td>{{ $bill->amount ?? '-' }} BDT</td>
-        </tr>
-        <tr>
-            <td><strong>Status</strong></td>
-            <td>
-                @if ($bill->payment_status == 1)
+            <td>{{ $bill->amount ?? '-' }} BDT (@if ($bill->payment_status == 1)
                     <span style="color: green; font-weight: bold;">Paid</span>
                 @else
                     <span style="color: red; font-weight: bold;">Unpaid</span>
-                @endif
-            </td>
+                @endif)</td>
         </tr>
 
         @if ($bill->payment_status == 1)
             <tr>
                 <td><strong>Payment Date</strong></td>
-                <td>{{ \Carbon\Carbon::parse($bill->payment_date)->format('F j, Y') }}</td>
-            </tr>
-            <tr>
-                <td><strong>Method</strong></td>
-                <td>{{ $bill->payment_method ?? '-' }}</td>
+                <td>{{ \Carbon\Carbon::parse($bill->payment_date)->format('F j, Y') }}
+                    ({{ $bill->payment_method ?? '-' }})</td>
             </tr>
         @endif
     </table>
@@ -162,7 +161,7 @@
             @if ($details->{'gpa_' . $yearName . '_year'})
                 <tr>
                     <td>{{ $yearName }} Year</td>
-                    <td>{{ $details->{'gpa_' . $yearName . '_year'} ?? '-' }}</td>
+                    <td style="width: 30%">{{ $details->{'gpa_' . $yearName . '_year'} ?? '-' }}</td>
                 </tr>
             @endif
         @endforeach
@@ -175,7 +174,8 @@
             @if ($details->{$c->certificateField()} == 'yes')
                 <tr>
                     <td>{{ $c->displayName() }}</td>
-                    <td style="text-transform: capitalize">{{ $details->{$c->certificateField()} ?? '-' }}</td>
+                    <td style="text-transform: capitalize;width:30%;">{{ $details->{$c->certificateField()} ?? '-' }}
+                    </td>
                 </tr>
             @endif
         @endforeach

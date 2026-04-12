@@ -19,6 +19,8 @@ Route::controller(StudentDashboardController::class)->middleware('auth')->group(
     Route::get('/student/dashboard', 'index')->name('student.dashboard');
     Route::get('/student/form', 'showForm')->name('student.form');
     Route::post('/student/form', 'submitForm')->name('student.form.submit');
+    Route::get('/student/form/edit', 'edit')->name('student.form.edit');
+    Route::put('/student/form/update', 'update')->name('student.form.update');
     Route::get('/student/download-form', 'downloadForm')->name('student.download-form');
 });
 

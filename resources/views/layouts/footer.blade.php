@@ -7,9 +7,9 @@
             <div class="text-center md:text-left">
                 <h3 class="text-lg font-semibold text-white mb-2">Contact</h3>
                 <p class="text-sm text-white leading-6">
-                    📧 info@ru.ac.bd <br>
-                    📞 +880-XXX-XXXXXX <br>
-                    📍 Rajshahi University, Bangladesh
+                    📧 @ru.ac.bd <br>
+                    📞 XXX-XXXXXX <br>
+                    📍 University of Rajshahi, Bangladesh
                 </p>
             </div>
 

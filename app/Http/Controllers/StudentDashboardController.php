@@ -34,9 +34,17 @@ class StudentDashboardController extends Controller
         if (!$user) {
             return redirect()->route('login');
         }
+        $userDetails = UserDetails::where('username', $user->username)->first();
+        if ($userDetails) {
+            return redirect()->route('student.dashboard')->with('error', 'You have already submitted the form.For changes, go to edit information section.');
+        }
 
-        $department = strtolower(str_replace('&', 'and', $user->department));
+        $department = strtolower($user->department);
         $department = Department::where('name', $department)->first();
+        if (!$department) {
+            $department = str_replace('&', 'and', $user->department);
+            $department = Department::where('name', $department)->first();
+        }
 
         $data['username'] = $user->username;
         $data['name'] = $user->name;
@@ -104,6 +112,96 @@ class StudentDashboardController extends Controller
         }
     }
 
+    public function edit()
+    {
+        $user = auth()->user();
+        $userDetails = UserDetails::where('username', $user->username)->first();
+
+        if (!$userDetails) {
+            return redirect()->route('student.form')->with('error', 'Please fill out the form first.');
+        }
+
+        return view('student.edit', compact('userDetails'));
+    }
+
+    public function update(Request $request)
+    {
+        $user = auth()->user();
+        $userDetails = UserDetails::where('username', $user->username)->first();
+
+        if (!$userDetails) {
+            return redirect()->route('student.form')->with('error', 'No existing record found.');
+        }
+
+        // Validation rules
+        $request->validate([
+            'name_bangla' => 'required|regex:/^[\p{Bengali}\s]+$/u',
+            'fname' => 'required',
+            'session' => 'required',
+            'email' => 'required|email|unique:user_details,email,' . $userDetails->id,
+            'emergency_contact_name' => 'required',
+            'emergency_contact_no' => 'required|regex:/^\d{11}$/',
+            'emergency_contact_relation' => 'required',
+            'mobile' => 'required|regex:/^\d{11}$/',
+            'permanent_address' => 'required',
+            'present_address' => 'required',
+            'relatives_in_rajshahi' => 'required|in:yes,no',
+            'is_home_in_rajshahi' => 'required|in:yes,no',
+            'current_year' => 'required|in:2,3,4,5',
+            'current_semester' => 'nullable|in:1,2',
+            'gpa_1st_year' => 'nullable|numeric|between:1,4',
+            'gpa_2nd_year' => 'nullable|numeric|between:1,4',
+            'gpa_3rd_year' => 'nullable|numeric|between:1,4',
+            'gpa_4th_year' => 'nullable|numeric|between:1,4',
+            'international_certificate' => 'nullable|in:yes,no',
+            'national_certificate' => 'nullable|in:yes,no',
+            'university_certificate' => 'nullable|in:yes,no',
+            'journalism_certificate' => 'nullable|in:yes,no',
+            'bncc_certificate' => 'nullable|in:yes,no',
+            'roverscout_certificate' => 'nullable|in:yes,no',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            // Update basic fields
+            $updateData = $request->only([
+                'name_bangla',
+                'fname',
+                'session',
+                'email',
+                'emergency_contact_name',
+                'emergency_contact_no',
+                'emergency_contact_relation',
+                'mobile',
+                'permanent_address',
+                'present_address',
+                'relatives_in_rajshahi',
+                'is_home_in_rajshahi',
+                'current_year',
+                'current_semester',
+                'gpa_1st_year',
+                'gpa_2nd_year',
+                'gpa_3rd_year',
+                'gpa_4th_year',
+                'international_certificate',
+                'national_certificate',
+                'university_certificate',
+                'journalism_certificate',
+                'bncc_certificate',
+                'roverscout_certificate'
+            ]);
+
+            // Update the record
+            $userDetails->update($updateData);
+
+            DB::commit();
+            return redirect()->route('student.dashboard')->with('success', 'Form updated successfully!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Failed to update form: ' . $e->getMessage())->withInput();
+        }
+    }
+
     public function downloadForm()
     {
         $user = auth()->user();
@@ -122,7 +220,10 @@ class StudentDashboardController extends Controller
             'mode' => 'utf-8',
             'format' => 'A4',
             'showWatermarkImage' => true,
-
+            'margin_top' => 8,
+            'margin_right' => 10,
+            'margin_left' => 10,
+            'margin_bottom' => 8,
             'fontDir' => array_merge($fontDirs, [
                 public_path('fonts'),
             ]),
@@ -137,6 +238,7 @@ class StudentDashboardController extends Controller
         ]);
 
         $mpdf->SetWatermarkImage(public_path('logo.png'), 0.1, 'D');
+        $mpdf->SetProtection(['print'], '', 'mk919@', 128);
         $mpdf->WriteHTML($html);
 
         return $mpdf->Output('application-form.pdf', 'D'); // Download

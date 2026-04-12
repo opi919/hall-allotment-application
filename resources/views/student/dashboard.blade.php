@@ -18,10 +18,20 @@
                 </div>
                 <!-- Header -->
                 <div class="mb-6 sm:mb-8">
-                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">Student Dashboard</h1>
-                    <p class="text-gray-600 mt-1 text-sm sm:text-base">
-                        Welcome back, {{ $userDetails->name }}
-                    </p>
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <div>
+                            <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">Student Dashboard</h1>
+                            <p class="text-gray-600 mt-1 text-sm sm:text-base">
+                                Welcome back, {{ $userDetails->name }}
+                            </p>
+                        </div>
+                        <div class="flex gap-3">
+                            <a href="{{ route('student.form.edit') }}"
+                                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors">
+                                Edit Information
+                            </a>
+                        </div>
+                    </div>
                 </div>
 
                 @if (session('success'))
@@ -62,18 +72,18 @@
                                         </a>
                                     @endif
 
-                                    @if ($bill->payment_status == 1)
-                                        <a href="{{ route('student.download-form') }}"
-                                            class="ml-4 px-6 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium">
-                                            Download Form
-                                        </a>
-                                    @endif
-
                                     <span
-                                        class="px-3 py-1 rounded-lg ml-2 text-sm font-medium
+                                        class="px-3 py-1 rounded-lg text-sm font-medium
                                     {{ $bill->payment_status == 1 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
                                         {{ $bill->payment_status == 1 ? 'Paid' : 'Unpaid' }}
                                     </span>
+
+                                    @if ($bill->payment_status == 1)
+                                        <a href="{{ route('student.download-form') }}"
+                                            class="ml-4 px-6 py-2 bg-green-600 text-white rounded-lg text-sm font-medium">
+                                            Download PDF
+                                        </a>
+                                    @endif
                                 </div>
                             </div>
 
