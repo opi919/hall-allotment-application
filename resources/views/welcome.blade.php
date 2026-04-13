@@ -169,7 +169,7 @@
         <section class="a4-sheet p-8 lg:p-12">
             <div class="w-full">
                 <div class="flex justify-center mb-2">
-                    <img src="{{ asset('logo.png') }}" alt="" width="80">
+                    <img src="{{ asset('logo/logo.png') }}" alt="" width="80">
                 </div>
                 <h1 class="title">রাজশাহী বিশ্ববিদ্যালয়</h1>
                 <p class="subtitle">প্রভোস্ট কাউন্সিল</p>

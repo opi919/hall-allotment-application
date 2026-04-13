@@ -4,7 +4,7 @@
     <div class="min-h-screen bg-gray-100 flex items-center justify-center">
         <div
             class="w-[500px] h-auto p-10 bg-white rounded-lg shadow-md flex flex-col justify-center mx-auto border border-gray-300">
-            <img src="{{ asset('logo.png') }}" alt="" width="80" class="mx-auto mb-5">
+            <img src="{{ asset('logo/logo.png') }}" alt="" width="80" class="mx-auto mb-5">
             <h1 class="text-[28px] font-bold text-[#2c3e50] text-center mb-[30px]">
                 Login to Your Account
             </h1>

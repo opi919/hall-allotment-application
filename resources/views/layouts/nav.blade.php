@@ -6,7 +6,7 @@
                 <!-- Logo -->
                 <a href="{{ route('home') }}" class="flex items-center text-lg font-bold tracking-wide">
                     <div class="flex items-center justify-center w-12 h-12 bg-white rounded p-1">
-                        <img src="{{ asset('logo.png') }}" class="" alt="Logo">
+                        <img src="{{ asset('logo/logo.png') }}" class="" alt="Logo">
                     </div>
                     <div class="flex flex-col">
                         <span class="ml-2">University of Rajshahi</span>

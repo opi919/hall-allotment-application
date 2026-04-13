@@ -8,7 +8,7 @@
             <div class="bg-white rounded-2xl shadow-xl p-8">
                 <!-- Header -->
                 <div class="text-center mb-8">
-                    <img src="{{ asset('logo.png') }}" alt="Logo" class="w-16 h-16 mx-auto mb-4">
+                    <img src="{{ asset('logo/logo.png') }}" alt="Logo" class="w-16 h-16 mx-auto mb-4">
                     <h1 class="text-3xl font-bold text-gray-800 mb-2">Admin Login</h1>
                     <p class="text-gray-600">Sign in to access the admin dashboard</p>
                 </div>
