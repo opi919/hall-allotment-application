@@ -82,12 +82,9 @@ class StudentLoginController extends Controller
         $request_data_encoded = base64_encode(json_encode($request_data));
         $response = Http::post($url, ['request' => $request_data_encoded]);
 
-        Log::info('Encoded verification request', ['request_data_encoded' => $request_data_encoded]);
         $response = Http::withBody($request_data_encoded, 'text/plain')->post($url);
 
-        Log::info('Verification response', ['response' => $response->body()]);
         $response_array = json_decode(base64_decode($response->body()), true);
-        Log::info('Decoded verification response', ['response_array' => $response_array]);
         return $response_array;
     }
 }
