@@ -17,7 +17,7 @@
     </div>
 
     <div style="text-align: center;marin-bottom:10px !important;">
-        <img src="{{ public_path('logo.png') }}" alt="University Logo" style="display: block; width: 80px;">
+        <img src="{{ public_path('logo/logo.png') }}" alt="University Logo" style="display: block; width: 80px;">
     </div>
     <h2 style="text-align: center;margin-top:0px;margin-bottom:0px;font-weight: normal;">University of Rajshahi</h2>
     <h2 style="text-align: center; margin-bottom: 20px;margin-top:5px;">Hall Allotment Application</h2>
