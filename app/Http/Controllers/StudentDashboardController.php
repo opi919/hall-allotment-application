@@ -85,7 +85,7 @@ class StudentDashboardController extends Controller
             'is_home_in_rajshahi' => 'required',
             'current_year' => 'required',
             'current_semester' => 'nullable',
-            'gpa_1st_year' => 'nullable|numeric|between:1,4',
+            'gpa_1st_year' => 'required|numeric|between:1,4',
             'gpa_2nd_year' => 'nullable|numeric|between:1,4',
             'gpa_3rd_year' => 'nullable|numeric|between:1,4',
             'gpa_4th_year' => 'nullable|numeric|between:1,4',
