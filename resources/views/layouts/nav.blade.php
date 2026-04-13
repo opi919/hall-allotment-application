@@ -4,7 +4,8 @@
             <div class="flex justify-between items-center h-20">
 
                 <!-- Logo -->
-                <a href="{{ env('APP_URL') }}" class="flex items-center text-lg font-bold tracking-wide">    <div class="flex items-center justify-center w-12 h-12 bg-white rounded p-1">
+                <a href="{{ config('app.url') }}" class="flex items-center text-lg font-bold tracking-wide">
+                    <div class="flex items-center justify-center w-12 h-12 bg-white rounded p-1">
                         <img src="{{ asset('logo.png') }}" class="" alt="Logo">
                     </div>
                     <div class="flex flex-col">
