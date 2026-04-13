@@ -227,6 +227,7 @@ class StudentDashboardController extends Controller
             'margin_right' => 10,
             'margin_left' => 10,
             'margin_bottom' => 8,
+            'tempDir' => storage_path('mpdf'),
             'fontDir' => array_merge($fontDirs, [
                 public_path('fonts'),
             ]),
