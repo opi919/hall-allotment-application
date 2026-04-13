@@ -4,7 +4,7 @@
             <div class="flex justify-between items-center h-20">
 
                 <!-- Logo -->
-                <a href="/" class="flex items-center text-lg font-bold tracking-wide">
+                <a href="/residency" class="flex items-center text-lg font-bold tracking-wide">
                     <div class="flex items-center justify-center w-12 h-12 bg-white rounded p-1">
                         <img src="{{ asset('logo.png') }}" class="" alt="Logo">
                     </div>
