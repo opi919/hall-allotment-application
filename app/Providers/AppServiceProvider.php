@@ -20,8 +20,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (request()->server->has('REQUEST_URI')) {
-            URL::forceRootUrl(config('app.url') . '/residency');
+        if (env('APP_ENV') === 'production') {
+            if (request()->server->has('REQUEST_URI')) {
+                URL::forceRootUrl(config('app.url') . '/residency');
+            }
         }
     }
 }
