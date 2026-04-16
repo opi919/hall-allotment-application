@@ -7,7 +7,7 @@
 </head>
 
 <body style="font-family: sans-serif; font-size: 12px; color: #333;">
-    <div style="position: absolute; bottom: 20px; left: 40px; right: 40px;">
+    <div style="position: absolute; bottom: 15px; left: 40px; right: 40px;">
         <table class="w-full">
             <tr>
                 <td class="text-xs text-right"><strong>Developed by:</strong> ICT Center, RU
