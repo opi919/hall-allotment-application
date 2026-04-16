@@ -424,7 +424,7 @@ class StudentDashboardController extends Controller
             ],
         ]);
 
-        $mpdf->SetWatermarkImage(public_path('logo.png'), 0.1, 'D');
+        $mpdf->SetWatermarkImage(public_path('logo/logo.png'), 0.1, '', [0, 0]);
         $mpdf->SetProtection(['print'], '', 'mk919@', 128);
         $mpdf->WriteHTML($html);
 
