@@ -340,10 +340,17 @@
 
             <div class="text-center">
                 @if (auth()->check())
-                    <a href="{{ route('student.dashboard') }}"
-                        class="inline-block mt-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
-                        Dashboard
-                    </a>
+                    @if (auth()->user()->isAdmin())
+                        <a href="{{ route('admin.dashboard') }}"
+                            class="inline-block mt-6 px-12 py-2 bg-blue-600 hover:bg-blue-800 text-white rounded hover:bg-blue-700 transition">
+                            Admin Dashboard
+                        </a>
+                    @else
+                        <a href="{{ route('student.dashboard') }}"
+                            class="inline-block mt-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                            Dashboard
+                        </a>
+                    @endif
                 @elseif(App\Models\Setting::where('key', 'allow_application')->first()?->value)
                     <a href="{{ route('login') }}"
                         class="inline-block mt-6 px-12 py-2 bg-blue-600 hover:bg-blue-800 text-white rounded hover:bg-blue-700 transition">
