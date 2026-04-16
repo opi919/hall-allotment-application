@@ -171,10 +171,10 @@ class StudentDashboardController extends Controller
                 //calculate gpa_*_year with average of two semesters
                 if ($i % 2 == 0) {
                     $year = $i / 2;
-                    $validated["gpa_{$year}_year"] = round(($validated["semester_{$i}_gpa"] + $validated["semester_" . ($i - 1) . "_gpa"]) / 2, 2);
+                    $validated["gpa_{$year}_year"] = round(($validated["semester_{$i}_gpa"] + $validated["semester_" . ($i - 1) . "_gpa"]) / 2, 3);
                 } else if ($i == $completedSemesters && $currentSemester == 2) {
                     $year = ceil($i / 2);
-                    $validated["gpa_{$year}_year"] = round($validated["semester_{$i}_gpa"], 2);
+                    $validated["gpa_{$year}_year"] = round($validated["semester_{$i}_gpa"], 3);
                 }
             }
         }

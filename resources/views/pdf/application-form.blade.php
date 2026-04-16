@@ -20,7 +20,7 @@
         <img src="{{ public_path('logo/logo.png') }}" alt="University Logo" style="display: block; width: 80px;">
     </div>
     <h2 style="text-align: center;margin-top:0px;margin-bottom:0px;font-weight: normal;">University of Rajshahi</h2>
-    <h2 style="text-align: center; margin-bottom: 20px;margin-top:5px;">Hall Allotment Application</h2>
+    <h2 style="text-align: center; margin-bottom: 20px;margin-top:5px;">Hall Residency Application</h2>
 
     <h3 style="margin-top:10px;">Personal Information</h3>
 
@@ -160,8 +160,8 @@
             {{ $yearName = $year == 1 ? '1st' : ($year == 2 ? '2nd' : ($year == 3 ? '3rd' : '4th')) }}
             @if ($details->{'gpa_' . $year . '_year'})
                 <tr>
-                    <td>{{ $yearName }} Year GPA/YGPA</td>
-                    <td style="width: 30%">{{ $details->{'gpa_' . $year . '_year'} ?? '-' }}</td>
+                    <td>{{ $yearName }} Year GPA</td>
+                    <td style="width: 30%">{{ number_format($details->{'gpa_' . $year . '_year'}, 2) ?? '-' }}</td>
                 </tr>
             @endif
         @endforeach

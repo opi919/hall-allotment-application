@@ -222,16 +222,16 @@
 
                         <div class="space-y-3 text-sm sm:text-base">
                             @foreach ([
-            '1st Year GPA/YGPA' => $details->gpa_1_year,
-            '2nd Year GPA/YGPA' => $details->gpa_2_year,
-            '3rd Year GPA/YGPA' => $details->gpa_3_year,
-            '4th Year GPA/YGPA' => $details->gpa_4_year,
+            '1st Year GPA' => $details->gpa_1_year,
+            '2nd Year GPA' => $details->gpa_2_year,
+            '3rd Year GPA' => $details->gpa_3_year,
+            '4th Year GPA' => $details->gpa_4_year,
         ] as $year => $gpa)
                                 <div class="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center gap-1">
                                     <span>{{ $year }}</span>
                                     <span
                                         class="px-3 py-1 rounded-lg {{ $gpa ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }} font-medium">
-                                        {{ $gpa ?? '-' }}
+                                        {{ number_format($gpa, 3) ?? '-' }}
                                     </span>
                                 </div>
                             @endforeach
