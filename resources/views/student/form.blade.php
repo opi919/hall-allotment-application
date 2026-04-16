@@ -90,7 +90,7 @@
                     @enderror
                 </div>
                 <div>
-                    <label class="font-semibold">Session<span class="text-red-500">*</span></label>
+                    <label class="font-semibold">Admission Session<span class="text-red-500">*</span></label>
                     <input type="text" name="session" placeholder="Session"
                         class="w-full border border-gray-400 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-500"
                         value="{{ $session }}" readonly>

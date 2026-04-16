@@ -73,7 +73,7 @@
                         <td>{{ $details->hall_name ?? '-' }}</td>
                     </tr>
                     <tr>
-                        <td><strong>Session</strong></td>
+                        <td><strong>Admission Session</strong></td>
                         <td>{{ $details->session ?? '-' }}</td>
                     </tr>
                     <tr>
