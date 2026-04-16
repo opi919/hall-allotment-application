@@ -223,15 +223,17 @@
                         <div class="space-y-3 text-sm sm:text-base">
                             @if ($details->academic_system == 'yearly')
                                 @foreach ([1, 2, 3, 4] as $year)
-                                    <div
-                                        class="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center gap-1">
-                                        <span>{{ $year }}{{ $year == 1 ? 'st' : ($year == 2 ? 'nd' : ($year == 3 ? 'rd' : 'th')) }}
-                                            Year GPA</span>
-                                        <span
-                                            class="px-3 py-1 rounded-lg {{ $details->{'gpa_' . $year . '_year'} ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }} font-medium">
-                                            {{ number_format($details->{'gpa_' . $year . '_year'}, 3) ?? '-' }}
-                                        </span>
-                                    </div>
+                                    @if ($details->{'gpa_' . $year . '_year'})
+                                        <div
+                                            class="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center gap-1">
+                                            <span>{{ $year }}{{ $year == 1 ? 'st' : ($year == 2 ? 'nd' : ($year == 3 ? 'rd' : 'th')) }}
+                                                Year GPA</span>
+                                            <span
+                                                class="px-3 py-1 rounded-lg {{ $details->{'gpa_' . $year . '_year'} ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }} font-medium">
+                                                {{ number_format($details->{'gpa_' . $year . '_year'}, 3) ?? '-' }}
+                                            </span>
+                                        </div>
+                                    @endif
                                 @endforeach
                             @elseif($details->academic_system == 'semester')
                                 @foreach ([1, 2, 3, 4, 5, 6, 7, 8] as $semester)
