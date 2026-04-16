@@ -397,6 +397,11 @@ class StudentDashboardController extends Controller
         $fontConfig = (new FontVariables())->getDefaults();
         $fontData = $fontConfig['fontdata'];
 
+        //check if storage/mpdf directory exists, if not create it
+        if (!file_exists(storage_path('mpdf'))) {
+            mkdir(storage_path('mpdf'), 0755, true);
+        }
+
         $mpdf = new Mpdf([
             'mode' => 'utf-8',
             'format' => 'A4',
