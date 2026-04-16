@@ -2,17 +2,12 @@
 
 @section('content')
     <div class="container mx-auto my-8">
-        @if (
-            $errors->any())
+        @if ($errors->any())
             <div class="max-w-5xl mx-auto p-4 bg-red-100 border border-red-400 text-red-700 rounded mb-4">
-                <strong>GPA Errors:</strong>
+                <strong>Errors:</strong>
                 <ul class="list-disc list-inside mt-2">
-                    @foreach ($errors->messages() as $field => $messages)
-                        @if (str_starts_with($field, 'gpa_'))
-                            @foreach ($messages as $message)
-                                <li>{{ $message }}</li>
-                            @endforeach
-                        @endif
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
                     @endforeach
                 </ul>
             </div>
