@@ -45,6 +45,7 @@
             display: flex;
             justify-content: center;
             align-items: flex-start;
+            text-align: justify;
         }
 
         .a4-sheet {
