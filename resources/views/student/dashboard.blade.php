@@ -246,7 +246,7 @@
                                             </span>
                                         </div>
                                     @endif
-                                @endif
+                                @endforeach
                                 <div class="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center gap-1">
                                     <span>Highest GPA/SGPA/YGPA/CGPA in the Applicant’s Latest Result Sheet</span>
                                     <span class="px-3 py-1 rounded-lg bg-green-100 text-green-700 font-medium">
