@@ -156,15 +156,28 @@
     <h3 style="margin-top: 20px;">Result</h3>
 
     <table width="100%" border="1" cellpadding="6" cellspacing="0" style="border-collapse: collapse;">
-        @foreach ([1, 2, 3, 4] as $year)
-            {{ $yearName = $year == 1 ? '1st' : ($year == 2 ? '2nd' : ($year == 3 ? '3rd' : '4th')) }}
-            @if ($details->{'gpa_' . $year . '_year'})
-                <tr>
-                    <td>{{ $yearName }} Year GPA</td>
-                    <td style="width: 30%">{{ number_format($details->{'gpa_' . $year . '_year'}, 3) ?? '-' }}</td>
-                </tr>
-            @endif
-        @endforeach
+        @if ($details->academic_system == 'yearly')
+            @foreach ([1, 2, 3, 4] as $year)
+                {{ $yearName = $year == 1 ? '1st' : ($year == 2 ? '2nd' : ($year == 3 ? '3rd' : '4th')) }}
+                @if ($details->{'gpa_' . $year . '_year'})
+                    <tr>
+                        <td>{{ $yearName }} Year GPA</td>
+                        <td style="width: 30%">{{ number_format($details->{'gpa_' . $year . '_year'}, 3) ?? '-' }}</td>
+                    </tr>
+                @endif
+            @endforeach
+        @elseif($details->academic_system == 'semester')
+            @foreach ([1, 2, 3, 4, 5, 6, 8] as $semester)
+                @if ($details->{'semester_' . $semester . '_gpa'})
+                    <tr>
+                        <td>{{ $semester == 1 ? '1st' : ($semester == 2 ? '2nd' : ($semester == 3 ? '3rd' : '4th')) }}
+                            Semester GPA</td>
+                        <td style="width: 30%">
+                            {{ number_format($details->{'semester_' . $semester . '_gpa'}, 3) ?? '-' }}</td>
+                    </tr>
+                @endif
+            @endforeach
+        @endif
         <tr>
             <td>Highest GPA/SGPA/YGPA/CGPA in the Applicant’s Latest Result Sheet</td>
             <td style="width: 30%">{{ number_format($details->last_highest_gpa, 3) ?? '-' }}</td>

@@ -221,26 +221,38 @@
                         <h3 class="text-lg font-semibold mb-4">GPA Overview</h3>
 
                         <div class="space-y-3 text-sm sm:text-base">
-                            @foreach ([
-            '1st Year GPA' => $details->gpa_1_year,
-            '2nd Year GPA' => $details->gpa_2_year,
-            '3rd Year GPA' => $details->gpa_3_year,
-            '4th Year GPA' => $details->gpa_4_year,
-        ] as $year => $gpa)
+                            @if ($details->academic_system == 'yearly')
+                                @foreach ([1, 2, 3, 4] as $year)
+                                    <div
+                                        class="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center gap-1">
+                                        <span>{{ $year }}{{ $year == 1 ? 'st' : ($year == 2 ? 'nd' : ($year == 3 ? 'rd' : 'th')) }}
+                                            Year GPA</span>
+                                        <span
+                                            class="px-3 py-1 rounded-lg {{ $details->{'gpa_' . $year . '_year'} ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }} font-medium">
+                                            {{ number_format($details->{'gpa_' . $year . '_year'}, 3) ?? '-' }}
+                                        </span>
+                                    </div>
+                                @endforeach
+                            @elseif($details->academic_system == 'semester')
+                                @foreach ([1, 2, 3, 4, 5, 6, 7, 8] as $semester)
+                                    @if ($details->{'semester_' . $semester . '_gpa'})
+                                        <div
+                                            class="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center gap-1">
+                                            <span>{{ $semester }}{{ $semester == 1 ? 'st' : ($semester == 2 ? 'nd' : ($semester == 3 ? 'rd' : 'th')) }}
+                                                Semester GPA</span>
+                                            <span
+                                                class="px-3 py-1 rounded-lg {{ $details->{'semester_' . $semester . '_gpa'} ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }} font-medium">
+                                                {{ number_format($details->{'semester_' . $semester . '_gpa'}, 3) ?? '-' }}
+                                            </span>
+                                        </div>
+                                    @endif
+                                @endif
                                 <div class="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center gap-1">
-                                    <span>{{ $year }}</span>
-                                    <span
-                                        class="px-3 py-1 rounded-lg {{ $gpa ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }} font-medium">
-                                        {{ number_format($gpa, 3) ?? '-' }}
+                                    <span>Highest GPA/SGPA/YGPA/CGPA in the Applicant’s Latest Result Sheet</span>
+                                    <span class="px-3 py-1 rounded-lg bg-green-100 text-green-700 font-medium">
+                                        {{ number_format($details->last_highest_gpa, 3) ?? '-' }}
                                     </span>
                                 </div>
-                            @endforeach
-                            <div class="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center gap-1">
-                                <span>Highest GPA/SGPA/YGPA/CGPA in the Applicant’s Latest Result Sheet</span>
-                                <span class="px-3 py-1 rounded-lg bg-green-100 text-green-700 font-medium">
-                                    {{ number_format($details->last_highest_gpa, 3) ?? '-' }}
-                                </span>
-                            </div>
                         </div>
                     </div>
 
