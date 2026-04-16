@@ -10,7 +10,7 @@
                     </div>
                     <div class="flex flex-col">
                         <span class="ml-2">University of Rajshahi</span>
-                        <span class="ml-2 text-sm font-sm">Residential Application</span>
+                        <span class="ml-2 text-sm font-sm">Hall Residential Application</span>
                     </div>
                 </a>
 
