@@ -32,7 +32,7 @@
             <!-- Basic Info -->
             <div class="grid md:grid-cols-2 gap-4">
                 <div>
-                    <label class="font-semibold">Username <span class="text-red-500">*</span></label>
+                    <label class="font-semibold">Student ID <span class="text-red-500">*</span></label>
                     <input type="text" name="username" placeholder="Username"
                         class="w-full border border-gray-400 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-500"
                         value="{{ $username }}" readonly>
@@ -302,7 +302,7 @@
             <div id="last_highest_gpa" class="grid md:grid-cols-2 gap-4 hidden">
                 <div class="">
                     <label class="font-semibold last_gpa_label">Last Highest GPA</label> <br>
-                    <small class="text-red-500">ভাইবা বোর্ডে সর্বোচ্চ জিপিএ এর প্রমাণ সাথে নিয়ে আসতে হবে।</small>
+                    <small class="text-red-500">ভাইভা বোর্ডে সর্বোচ্চ জিপিএ এর প্রমাণ সাথে নিয়ে আসতে হবে।</small>
                     <input type="text" name="last_highest_gpa" placeholder=""
                         class="w-full border border-gray-400 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                         value="{{ old('last_highest_gpa') }}">

@@ -153,7 +153,7 @@
         @endif
     </table>
 
-    <h3 style="margin-top: 20px;">GPA Information</h3>
+    <h3 style="margin-top: 20px;">Result</h3>
 
     <table width="100%" border="1" cellpadding="6" cellspacing="0" style="border-collapse: collapse;">
         @foreach ([1, 2, 3, 4] as $year)
@@ -166,7 +166,7 @@
             @endif
         @endforeach
         <tr>
-            <td>Last Highest GPA/YGPA</td>
+            <td>Last Highest GPA/SGPA/YGPA</td>
             <td style="width: 30%">{{ $details->last_highest_gpa ?? '-' }}</td>
         </tr>
     </table>
