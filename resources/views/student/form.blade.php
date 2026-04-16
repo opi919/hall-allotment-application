@@ -358,12 +358,14 @@
             if (academicSystemSelect.value === 'semester') {
                 currentSemesterSelect.parentElement.classList.remove('hidden');
 
-                lastHighestGpaLabel.innerHTML = 'Last Semester Highest GPA <span class="text-red-500">*</span>';
+                lastHighestGpaLabel.innerHTML =
+                    'Highest GPA/SGPA/YGPA/CGPA in the Applicant’s Latest Result Sheet <span class="text-red-500">*</span>';
                 lastHighestGpa.classList.remove('hidden');
             } else if (academicSystemSelect.value === 'yearly') {
                 currentSemesterSelect.parentElement.classList.add('hidden');
 
-                lastHighestGpaLabel.innerHTML = 'Last Year Highest GPA <span class="text-red-500">*</span>';
+                lastHighestGpaLabel.innerHTML =
+                    'Highest GPA/SGPA/YGPA/CGPA in the Applicant’s Latest Result Sheet <span class="text-red-500">*</span>';
                 lastHighestGpa.classList.remove('hidden');
             } else {
                 currentSemesterSelect.parentElement.classList.add('hidden');
