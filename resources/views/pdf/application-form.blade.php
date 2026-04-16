@@ -166,7 +166,7 @@
             @endif
         @endforeach
         <tr>
-            <td>Last Highest GPA/SGPA/YGPA</td>
+            <td>Highest GPA/SGPA/YGPA/CGPA in the Applicant’s Latest Result Sheet</td>
             <td style="width: 30%">{{ $details->last_highest_gpa ?? '-' }}</td>
         </tr>
     </table>

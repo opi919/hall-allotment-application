@@ -102,6 +102,7 @@ class StudentDashboardController extends Controller
             'journalism_certificate' => 'nullable|in:yes',
             'bncc_certificate' => 'nullable|in:yes',
             'roverscout_certificate' => 'nullable|in:yes',
+            'blood_donor' => 'nullable|in:yes',
         ];
 
         // Custom validation messages
@@ -241,12 +242,13 @@ class StudentDashboardController extends Controller
             'current_year' => 'required|in:2,3,4,5',
             'current_semester' => 'required_if:academic_system,semester|nullable|in:1,2',
             'last_highest_gpa' => 'required|numeric|between:1,4',
-            'international_certificate' => 'nullable|in:yes,no',
-            'national_certificate' => 'nullable|in:yes,no',
-            'university_certificate' => 'nullable|in:yes,no',
-            'journalism_certificate' => 'nullable|in:yes,no',
-            'bncc_certificate' => 'nullable|in:yes,no',
-            'roverscout_certificate' => 'nullable|in:yes,no',
+            'international_certificate' => 'nullable|in:yes',
+            'national_certificate' => 'nullable|in:yes',
+            'university_certificate' => 'nullable|in:yes',
+            'journalism_certificate' => 'nullable|in:yes',
+            'bncc_certificate' => 'nullable|in:yes',
+            'roverscout_certificate' => 'nullable|in:yes',
+            'blood_donor' => 'nullable|in:yes',
         ];
 
         // Custom validation messages

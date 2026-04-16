@@ -328,7 +328,8 @@
             </div> --}}
 
             <div class="signature">
-                <div class="sig-block">
+                <div class="sig-block text-right">
+                    <img src="{{ asset('logo/signature.png') }}" alt="" width="120" class="mx-auto">
                     <div>প্রফেসর ড. ইসমত আরা বেগম</div>
                     <div>আহ্বায়ক, প্রাধ্যক্ষ পরিষদ</div>
                     <div>রাজশাহী বিশ্ববিদ্যালয়, রাজশাহী</div>

@@ -10,6 +10,7 @@ enum ExtraCurricular: string
     case journalism = 'journalism';
     case bncc = 'bncc';
     case roverscout = 'roverscout';
+    case blood_donor = 'blood_donor';
 
     public function certificateField(): string
     {
@@ -20,6 +21,7 @@ enum ExtraCurricular: string
             self::journalism => 'journalism_certificate',
             self::bncc => 'bncc_certificate',
             self::roverscout => 'roverscout_certificate',
+            self::blood_donor => 'blood_donor',
         };
     }
 
@@ -31,6 +33,7 @@ enum ExtraCurricular: string
             self::university => 'university_certificate_path',
             self::journalism => 'journalism_certificate_path',
             self::bncc => 'bncc_certificate_path',
+            self::blood_donor => 'blood_donor_certificate_path',
             self::roverscout => 'roverscout_certificate_path',
         };
     }
@@ -44,6 +47,7 @@ enum ExtraCurricular: string
             self::journalism => 'Journalism Certificate',
             self::bncc => 'BNCC Certificate',
             self::roverscout => 'Rover Scout Certificate',
+            self::blood_donor => 'Involvement with Blood Donation Organizations',
         };
     }
 }
