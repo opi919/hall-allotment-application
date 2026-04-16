@@ -161,13 +161,13 @@
             @if ($details->{'gpa_' . $year . '_year'})
                 <tr>
                     <td>{{ $yearName }} Year GPA</td>
-                    <td style="width: 30%">{{ number_format($details->{'gpa_' . $year . '_year'}, 2) ?? '-' }}</td>
+                    <td style="width: 30%">{{ number_format($details->{'gpa_' . $year . '_year'}, 3) ?? '-' }}</td>
                 </tr>
             @endif
         @endforeach
         <tr>
             <td>Highest GPA/SGPA/YGPA/CGPA in the Applicant’s Latest Result Sheet</td>
-            <td style="width: 30%">{{ $details->last_highest_gpa ?? '-' }}</td>
+            <td style="width: 30%">{{ number_format($details->last_highest_gpa, 3) ?? '-' }}</td>
         </tr>
     </table>
 
