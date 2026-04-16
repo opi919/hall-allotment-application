@@ -170,7 +170,7 @@
             @foreach ([1, 2, 3, 4, 5, 6, 8] as $semester)
                 @if ($details->{'semester_' . $semester . '_gpa'})
                     <tr>
-                        <td>{{ $semester == 1 ? '1st' : ($semester == 2 ? '2nd' : ($semester == 3 ? '3rd' : '4th')) }}
+                        <td>{{ $semester }}{{ $semester == 1 ? 'st' : ($semester == 2 ? 'nd' : ($semester == 3 ? 'rd' : 'th')) }}
                             Semester GPA</td>
                         <td style="width: 30%">
                             {{ number_format($details->{'semester_' . $semester . '_gpa'}, 3) ?? '-' }}</td>
