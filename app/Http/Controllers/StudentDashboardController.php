@@ -7,6 +7,7 @@ use App\Models\Department;
 use App\Models\Hall;
 use App\Models\UserDetails;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Mpdf\Config\ConfigVariables;
@@ -15,6 +16,12 @@ use Mpdf\Mpdf;
 
 class StudentDashboardController extends Controller
 {
+    //add middleware to check if user is authenticated
+    public function __construct()
+    {
+        $this->middleware('allowApplication')->except(['index', 'downloadForm']);
+    }
+
     public function index()
     {
         $userDetails = UserDetails::where('username', auth()->user()->username)->first();
@@ -49,7 +56,7 @@ class StudentDashboardController extends Controller
             $data['department'] = $department->name;
             //session = first two digit of the username
             $session = substr($user->username, 0, 2);
-            $data['session'] = $session - 1 . '-' . $session;
+            $data['session'] = '20' . $session - 1 . '-' . $session;
             $data['faculty'] = $department->faculty->name;
             //hall_name = third,fourth and fifth digit of the username
             $hall_code = substr($user->username, 2, 3);
@@ -65,106 +72,118 @@ class StudentDashboardController extends Controller
 
     public function submitForm(Request $request)
     {
+        // Base validation rules
         $rules = [
             'username' => 'required|unique:user_details,username',
-            'name' => 'required',
+            'name' => 'required|string|max:255',
             'name_bangla' => 'required|regex:/^[\p{Bengali}\s]+$/u',
-            'fname' => 'required',
-            'faculty' => 'required',
-            'department' => 'required',
-            'session' => 'required',
-            'hall_name' => 'required',
-            'email' => 'required|email|unique:user_details,email',
-            'emergency_contact_name' => 'required',
+            'fname' => 'required|string|max:255',
+            'faculty' => 'required|string|max:255',
+            'department' => 'required|string|max:255',
+            'session' => 'required|string|max:255',
+            'hall_name' => 'required|string|max:255',
+            'email' => 'required|email|unique:user_details,email|max:255',
+            'emergency_contact_name' => 'required|string|max:255',
             'emergency_contact_no' => 'required|regex:/^01[2-9]\d{8}$/',
-            'emergency_contact_relation' => 'required',
-            'mobile' => 'required|regex:/^01[2-9]\d{8}$/',
-            'permanent_address' => 'required',
-            'present_address' => 'required',
-            'relatives_in_rajshahi' => 'required',
-            'is_home_in_rajshahi' => 'required',
+            'emergency_contact_relation' => 'required|string|max:255',
+            'mobile' => 'required|regex:/^01[2-9]\d{8}$/|unique:user_details,mobile',
+            'permanent_address' => 'required|string|max:1000',
+            'present_address' => 'required|string|max:1000',
+            'relatives_in_rajshahi' => 'required|in:yes,no',
+            'is_home_in_rajshahi' => 'required|in:yes,no',
             'academic_system' => 'required|in:semester,yearly',
-            'current_year' => 'required',
+            'current_year' => 'required|in:2,3,4,5',
             'current_semester' => 'required_if:academic_system,semester|nullable|in:1,2',
-            'international_certificate' => 'nullable|in:yes,no',
-            'national_certificate' => 'nullable|in:yes,no',
-            'university_certificate' => 'nullable|in:yes,no',
-            'journalism_certificate' => 'nullable|in:yes,no',
-            'bncc_certificate' => 'nullable|in:yes,no',
-            'roverscout_certificate' => 'nullable|in:yes,no',
+            'last_highest_gpa' => 'required|numeric|between:1,4',
+            // Certificate fields
+            'international_certificate' => 'nullable|in:yes',
+            'national_certificate' => 'nullable|in:yes',
+            'university_certificate' => 'nullable|in:yes',
+            'journalism_certificate' => 'nullable|in:yes',
+            'bncc_certificate' => 'nullable|in:yes',
+            'roverscout_certificate' => 'nullable|in:yes',
         ];
+
+        // Custom validation messages
         $messages = [
             'name_bangla.regex' => 'The name in Bangla must contain only Bengali characters and spaces.',
-            'emergency_contact_no.regex' => 'The emergency contact number must be a valid Bangladeshi mobile number.',
-            'mobile.regex' => 'The mobile number must be a valid Bangladeshi mobile number.',
-            'gpa_1_year.required' => 'The GPA for 1st year is required.',
-            'gpa_2_year.required' => 'The GPA for 2nd year is required.',
-            'gpa_3_year.required' => 'The GPA for 3rd year is required.',
-            'gpa_4_year.required' => 'The GPA for 4th year is required.',
-            'gpa_1_year.between' => 'The GPA for 1st year must be between 1 and 4.',
-            'gpa_2_year.between' => 'The GPA for 2nd year must be between 1 and 4.',
-            'gpa_3_year.between' => 'The GPA for 3rd year must be between 1 and 4.',
-            'gpa_4_year.between' => 'The GPA for 4th year must be between 1 and 4.',
-            'gpa_1_semester.between' => 'The GPA for 1st semester must be between 1 and 4.',
-            'gpa_2_semester.between' => 'The GPA for 2nd semester must be between 1 and 4.',
-            'gpa_3_semester.between' => 'The GPA for 3rd semester must be between 1 and 4.',
-            'gpa_4_semester.between' => 'The GPA for 4th semester must be between 1 and 4.',
-            'gpa_5_semester.between' => 'The GPA for 5th semester must be between 1 and 4.',
-            'gpa_6_semester.between' => 'The GPA for 6th semester must be between 1 and 4.',
-            'gpa_7_semester.between' => 'The GPA for 7th semester must be between 1 and 4.',
-            'gpa_8_semester.between' => 'The GPA for 8th semester must be between 1 and 4.',
-            'gpa_1_semester.required' => 'The GPA for 1st semester is required.',
-            'gpa_2_semester.required' => 'The GPA for 2nd semester is required.',
-            'gpa_3_semester.required' => 'The GPA for 3rd semester is required.',
-            'gpa_4_semester.required' => 'The GPA for 4th semester is required.',
-            'gpa_5_semester.required' => 'The GPA for 5th semester is required.',
-            'gpa_6_semester.required' => 'The GPA for 6th semester is required.',
-            'gpa_7_semester.required' => 'The GPA for 7th semester is required.',
-            'gpa_8_semester.required' => 'The GPA for 8th semester is required.',
+            'emergency_contact_no.regex' => 'The emergency contact number must be a valid Bangladeshi mobile number (01XXXXXXXXX).',
+            'mobile.regex' => 'The mobile number must be a valid Bangladeshi mobile number (01XXXXXXXXX).',
+            'mobile.unique' => 'This mobile number is already registered.',
+            'email.unique' => 'This email address is already registered.',
+            'username.unique' => 'This username is already registered.',
+            'academic_system.required' => 'Please select your academic system.',
+            'current_semester.required_if' => 'Current semester is required for semester system.',
+            'last_highest_gpa.required' => 'Last highest GPA is required.',
+            'last_highest_gpa.between' => 'The GPA must be between 1 and 4.',
         ];
 
-        // $validated = $request->validate($rules);
+        // Dynamic GPA validation based on academic system and current year/semester
         if ($request->academic_system === 'semester') {
-            foreach (range(1, ($request->current_year - 1) * 2) as $semester) {
-                $rules["gpa_{$semester}_semester"] = 'required|numeric|between:1,4';
+            $currentYear = (int) $request->current_year;
+            $currentSemester = (int) $request->current_semester;
+
+            // Calculate total completed semesters
+            $completedSemesters = min(($currentYear - 1) * 2 + ($currentSemester - 1), 8);
+
+            // Add validation for each completed semester
+            for ($i = 1; $i <= $completedSemesters; $i++) {
+                $rules["semester_{$i}_gpa"] = 'required|numeric|between:1,4';
+                $messages["semester_{$i}_gpa.required"] = "The GPA for {$i}" .
+                    ($i == 1 ? 'st' : ($i == 2 ? 'nd' : ($i == 3 ? 'rd' : 'th'))) . ' semester is required.';
+                $messages["semester_{$i}_gpa.between"] = "The GPA for {$i}" .
+                    ($i == 1 ? 'st' : ($i == 2 ? 'nd' : ($i == 3 ? 'rd' : 'th'))) . ' semester must be between 1 and 4.';
             }
         } else if ($request->academic_system === 'yearly') {
-            $rules['current_semester'] = 'nullable|in:1,2';
-            foreach (range(1, $request->current_year - 1) as $year) {
-                $rules["gpa_{$year}_year"] = 'required|numeric|between:1,4';
+            $currentYear = (int) $request->current_year;
+
+            // Add validation for each completed year
+            for ($i = 1; $i < $currentYear; $i++) {
+                $rules["gpa_{$i}_year"] = 'required|numeric|between:1,4';
+                $messages["gpa_{$i}_year.required"] = "The GPA for {$i}" .
+                    ($i == 1 ? 'st' : ($i == 2 ? 'nd' : ($i == 3 ? 'rd' : 'th'))) . ' year is required.';
+                $messages["gpa_{$i}_year.between"] = "The GPA for {$i}" .
+                    ($i == 1 ? 'st' : ($i == 2 ? 'nd' : ($i == 3 ? 'rd' : 'th'))) . ' year must be between 1 and 4.';
             }
         }
+
+        // Validate the request
         $validated = $request->validate($rules, $messages);
 
+        // Handle checkbox certificates (convert to yes/no)
+        $certificateFields = [
+            'international_certificate',
+            'national_certificate',
+            'university_certificate',
+            'journalism_certificate',
+            'bncc_certificate',
+            'roverscout_certificate'
+        ];
+
+        foreach ($certificateFields as $field) {
+            $validated[$field] = isset($validated[$field]) ? 'yes' : 'no';
+        }
 
         if ($validated['academic_system'] === 'semester') {
-            $validated['gpa_1st_year'] = ($validated['gpa_1_semester'] + $validated['gpa_2_semester']) / 2;
-            if ($request->current_year > 2) {
-                $validated['gpa_2nd_year'] = ($validated['gpa_3_semester'] + $validated['gpa_4_semester']) / 2;
-            }
-            if ($request->current_year > 3) {
-                $validated['gpa_3rd_year'] = ($validated['gpa_5_semester'] + $validated['gpa_6_semester']) / 2;
-            }
-            if ($request->current_year > 4) {
-                $validated['gpa_4th_year'] = ($validated['gpa_7_semester'] + $validated['gpa_8_semester']) / 2;
-            }
-        } elseif ($validated['academic_system'] === 'yearly') {
-            $validated['gpa_1st_year'] = $validated['gpa_1_year'];
-            if ($request->current_year > 2) {
-                $validated['gpa_2nd_year'] = $validated['gpa_2_year'];
-            }
-            if ($request->current_year > 3) {
-                $validated['gpa_3rd_year'] = $validated['gpa_3_year'];
-            }
-            if ($request->current_year > 4) {
-                $validated['gpa_4th_year'] = $validated['gpa_4_year'];
+            $completedSemesters = min(((int)$validated['current_year'] - 1) * 2 + ((int)$validated['current_semester'] - 1), 8);
+            for ($i = 1; $i <= $completedSemesters; $i++) {
+                //calculate gpa_*_year with average of two semesters
+                if ($i % 2 == 0) {
+                    $year = $i / 2;
+                    $validated["gpa_{$year}_year"] = round(($validated["semester_{$i}_gpa"] + $validated["semester_" . ($i - 1) . "_gpa"]) / 2, 2);
+                } else if ($i == $completedSemesters && $currentSemester == 2) {
+                    $year = ceil($i / 2);
+                    $validated["gpa_{$year}_year"] = round($validated["semester_{$i}_gpa"], 2);
+                }
             }
         }
 
         DB::beginTransaction();
         try {
+            // Create user details record
             UserDetails::create($validated);
 
+            // Create bill record
             $bill = new Bill();
             $bill->bill_id = time() . rand(100, 999);
             $bill->username = $request->username;
@@ -172,10 +191,14 @@ class StudentDashboardController extends Controller
             $bill->save();
 
             DB::commit();
-            return redirect()->route('student.dashboard')->with('success', 'Form submitted successfully!');
+            return redirect()->route('student.dashboard')->with('success', 'Application submitted successfully!');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with('error', 'Failed to submit form.');
+            Log::error('Failed to submit application', [
+                'username' => $request->username,
+                'error' => $e->getMessage()
+            ]);
+            return redirect()->back()->with('error', 'Failed to submit application. Please try again.')->withInput();
         }
     }
 
@@ -200,63 +223,154 @@ class StudentDashboardController extends Controller
             return redirect()->route('student.form')->with('error', 'No existing record found.');
         }
 
-        // Validation rules
-        $request->validate([
+        // Base validation rules
+        $rules = [
             'name_bangla' => 'required|regex:/^[\p{Bengali}\s]+$/u',
             'fname' => 'required',
             'session' => 'required',
             'email' => 'required|email|unique:user_details,email,' . $userDetails->id,
             'emergency_contact_name' => 'required',
-            'emergency_contact_no' => 'required|regex:/^\d{11}$/',
+            'emergency_contact_no' => 'required|regex:/^01[2-9]\d{8}$/',
             'emergency_contact_relation' => 'required',
-            'mobile' => 'required|regex:/^\d{11}$/',
+            'mobile' => 'required|regex:/^01[2-9]\d{8}$/|unique:user_details,mobile,' . $userDetails->id,
             'permanent_address' => 'required',
             'present_address' => 'required',
             'relatives_in_rajshahi' => 'required|in:yes,no',
             'is_home_in_rajshahi' => 'required|in:yes,no',
+            'academic_system' => 'required|in:semester,yearly',
             'current_year' => 'required|in:2,3,4,5',
-            'current_semester' => 'nullable|in:1,2',
-            'gpa_1st_year' => 'nullable|numeric|between:1,4',
-            'gpa_2nd_year' => 'nullable|numeric|between:1,4',
-            'gpa_3rd_year' => 'nullable|numeric|between:1,4',
-            'gpa_4th_year' => 'nullable|numeric|between:1,4',
+            'current_semester' => 'required_if:academic_system,semester|nullable|in:1,2',
+            'last_highest_gpa' => 'required|numeric|between:1,4',
             'international_certificate' => 'nullable|in:yes,no',
             'national_certificate' => 'nullable|in:yes,no',
             'university_certificate' => 'nullable|in:yes,no',
             'journalism_certificate' => 'nullable|in:yes,no',
             'bncc_certificate' => 'nullable|in:yes,no',
             'roverscout_certificate' => 'nullable|in:yes,no',
-        ]);
+        ];
+
+        // Custom validation messages
+        $messages = [
+            'name_bangla.regex' => 'The name in Bangla must contain only Bengali characters and spaces.',
+            'emergency_contact_no.regex' => 'The emergency contact number must be a valid Bangladeshi mobile number (01XXXXXXXXX).',
+            'mobile.regex' => 'The mobile number must be a valid Bangladeshi mobile number (01XXXXXXXXX).',
+            'mobile.unique' => 'This mobile number is already registered by another user.',
+            'email.unique' => 'This email address is already registered by another user.',
+            'academic_system.required' => 'Please select your academic system.',
+            'current_semester.required_if' => 'Current semester is required for semester system.',
+            'last_highest_gpa.required' => 'Last highest GPA is required.',
+            'last_highest_gpa.between' => 'The GPA must be between 1 and 4.',
+        ];
+
+        // Dynamic GPA validation based on academic system and current year/semester
+        if ($request->academic_system === 'semester') {
+            $currentYear = (int) $request->current_year;
+            $currentSemester = (int) $request->current_semester;
+
+            // Calculate total completed semesters
+            $completedSemesters = min(($currentYear - 1) * 2 + ($currentSemester - 1), 8);
+
+            // Add validation for each completed semester
+            for ($i = 1; $i <= $completedSemesters; $i++) {
+                $rules["semester_{$i}_gpa"] = 'required|numeric|between:1,4';
+                $messages["semester_{$i}_gpa.required"] = "The GPA for {$i}" .
+                    ($i == 1 ? 'st' : ($i == 2 ? 'nd' : ($i == 3 ? 'rd' : 'th'))) . ' semester is required.';
+                $messages["semester_{$i}_gpa.between"] = "The GPA for {$i}" .
+                    ($i == 1 ? 'st' : ($i == 2 ? 'nd' : ($i == 3 ? 'rd' : 'th'))) . ' semester must be between 1 and 4.';
+            }
+        } else if ($request->academic_system === 'yearly') {
+            $currentYear = (int) $request->current_year;
+
+            // Add validation for each completed year
+            for ($i = 1; $i < $currentYear; $i++) {
+                $rules["gpa_{$i}_year"] = 'required|numeric|between:1,4';
+                $messages["gpa_{$i}_year.required"] = "The GPA for {$i}" .
+                    ($i == 1 ? 'st' : ($i == 2 ? 'nd' : ($i == 3 ? 'rd' : 'th'))) . ' year is required.';
+                $messages["gpa_{$i}_year.between"] = "The GPA for {$i}" .
+                    ($i == 1 ? 'st' : ($i == 2 ? 'nd' : ($i == 3 ? 'rd' : 'th'))) . ' year must be between 1 and 4.';
+            }
+        }
+
+        // Validate the request
+        $validated = $request->validate($rules, $messages);
+
+        // Handle semester GPA calculation for yearly system
+        if ($validated['academic_system'] === 'semester') {
+            $currentYear = (int) $validated['current_year'];
+            $currentSemester = (int) $validated['current_semester'];
+            $completedSemesters = min(($currentYear - 1) * 2 + ($currentSemester - 1), 8);
+
+            for ($i = 1; $i <= $completedSemesters; $i++) {
+                // Calculate gpa_*_year with average of two semesters
+                if ($i % 2 == 0) {
+                    $year = $i / 2;
+                    if (isset($validated["semester_{$i}_gpa"]) && isset($validated["semester_" . ($i - 1) . "_gpa"])) {
+                        $validated["gpa_{$year}_year"] = round(($validated["semester_{$i}_gpa"] + $validated["semester_" . ($i - 1) . "_gpa"]) / 2, 2);
+                    }
+                } else if ($i == $completedSemesters && $currentSemester == 2) {
+                    $year = ceil($i / 2);
+                    if (isset($validated["semester_{$i}_gpa"])) {
+                        $validated["gpa_{$year}_year"] = round($validated["semester_{$i}_gpa"], 2);
+                    }
+                }
+            }
+        }
 
         DB::beginTransaction();
         try {
-            // Update basic fields
-            $updateData = $request->only([
-                'name_bangla',
-                'fname',
-                'session',
-                'email',
-                'emergency_contact_name',
-                'emergency_contact_no',
-                'emergency_contact_relation',
-                'mobile',
-                'permanent_address',
-                'present_address',
-                'relatives_in_rajshahi',
-                'is_home_in_rajshahi',
-                'current_year',
-                'current_semester',
-                'gpa_1st_year',
-                'gpa_2nd_year',
-                'gpa_3rd_year',
-                'gpa_4th_year',
-                'international_certificate',
-                'national_certificate',
-                'university_certificate',
-                'journalism_certificate',
-                'bncc_certificate',
-                'roverscout_certificate'
-            ]);
+            // Build dynamic update data
+            $updateData = [
+                'name_bangla' => $validated['name_bangla'],
+                'fname' => $validated['fname'],
+                'session' => $validated['session'],
+                'email' => $validated['email'],
+                'emergency_contact_name' => $validated['emergency_contact_name'],
+                'emergency_contact_no' => $validated['emergency_contact_no'],
+                'emergency_contact_relation' => $validated['emergency_contact_relation'],
+                'mobile' => $validated['mobile'],
+                'permanent_address' => $validated['permanent_address'],
+                'present_address' => $validated['present_address'],
+                'relatives_in_rajshahi' => $validated['relatives_in_rajshahi'],
+                'is_home_in_rajshahi' => $validated['is_home_in_rajshahi'],
+                'academic_system' => $validated['academic_system'],
+                'current_year' => $validated['current_year'],
+                'current_semester' => $validated['current_semester'] ?? null,
+                'last_highest_gpa' => $validated['last_highest_gpa'],
+                'international_certificate' => $validated['international_certificate'] ?? 'no',
+                'national_certificate' => $validated['national_certificate'] ?? 'no',
+                'university_certificate' => $validated['university_certificate'] ?? 'no',
+                'journalism_certificate' => $validated['journalism_certificate'] ?? 'no',
+                'bncc_certificate' => $validated['bncc_certificate'] ?? 'no',
+                'roverscout_certificate' => $validated['roverscout_certificate'] ?? 'no',
+            ];
+
+            // Add GPA fields based on academic system
+            if ($validated['academic_system'] === 'yearly') {
+                $currentYear = (int) $validated['current_year'];
+                for ($i = 1; $i < $currentYear; $i++) {
+                    if (isset($validated["gpa_{$i}_year"])) {
+                        $updateData["gpa_{$i}_year"] = $validated["gpa_{$i}_year"];
+                    }
+                }
+            } else if ($validated['academic_system'] === 'semester') {
+                $currentYear = (int) $validated['current_year'];
+                $currentSemester = (int) $validated['current_semester'];
+                $completedSemesters = min(($currentYear - 1) * 2 + ($currentSemester - 1), 8);
+
+                // Add semester GPAs
+                for ($i = 1; $i <= $completedSemesters; $i++) {
+                    if (isset($validated["semester_{$i}_gpa"])) {
+                        $updateData["semester_{$i}_gpa"] = $validated["semester_{$i}_gpa"];
+                    }
+                }
+
+                // Add calculated yearly GPAs
+                for ($i = 1; $i < $currentYear; $i++) {
+                    if (isset($validated["gpa_{$i}_year"])) {
+                        $updateData["gpa_{$i}_year"] = $validated["gpa_{$i}_year"];
+                    }
+                }
+            }
 
             // Update the record
             $userDetails->update($updateData);

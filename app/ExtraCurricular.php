@@ -38,9 +38,9 @@ enum ExtraCurricular: string
     public function displayName(): string
     {
         return match ($this) {
-            self::international => 'International Certificate/Medal',
-            self::national => 'National Certificate/Medal',
-            self::university => 'University Certificate/Medal',
+            self::international => 'International Level Certificate/Medal',
+            self::national => 'National Level Certificate/Medal',
+            self::university => 'University Level Certificate/Medal',
             self::journalism => 'Journalism Certificate',
             self::bncc => 'BNCC Certificate',
             self::roverscout => 'Rover Scout Certificate',

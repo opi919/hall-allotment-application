@@ -2,24 +2,42 @@
 
 @section('content')
     <div class="container mx-auto my-8">
-        @if ($errors->has('gpa_1st_year'))
-            <div class="max-w-5xl mx-auto p-4 bg-red-100 border border-red-400 text-red-700 rounded mb-2">
-                <strong>GPA Error:</strong> {{ $errors->first('gpa_1st_year') }}
+        @if (
+            $errors->any() &&
+                ($errors->has('gpa_1_year') ||
+                    $errors->has('gpa_2_year') ||
+                    $errors->has('gpa_3_year') ||
+                    $errors->has('gpa_4_year') ||
+                    $errors->has('gpa_1_semester') ||
+                    $errors->has('gpa_2_semester') ||
+                    $errors->has('gpa_3_semester') ||
+                    $errors->has('gpa_4_semester') ||
+                    $errors->has('gpa_5_semester') ||
+                    $errors->has('gpa_6_semester') ||
+                    $errors->has('gpa_7_semester') ||
+                    $errors->has('gpa_8_semester')))
+            <div class="max-w-5xl mx-auto p-4 bg-red-100 border border-red-400 text-red-700 rounded mb-4">
+                <strong>GPA Errors:</strong>
+                <ul class="list-disc list-inside mt-2">
+                    @foreach ($errors->messages() as $field => $messages)
+                        @if (str_starts_with($field, 'gpa_'))
+                            @foreach ($messages as $message)
+                                <li>{{ $message }}</li>
+                            @endforeach
+                        @endif
+                    @endforeach
+                </ul>
             </div>
         @endif
-        @if ($errors->has('gpa_2nd_year'))
-            <div class="max-w-5xl mx-auto p-4 bg-red-100 border border-red-400 text-red-700 rounded mb-2">
-                <strong>GPA Error:</strong> {{ $errors->first('gpa_2nd_year') }}
+
+        @if (session('success'))
+            <div class="max-w-5xl mx-auto p-4 bg-green-100 border border-green-400 text-green-700 rounded mb-4">
+                {{ session('success') }}
             </div>
         @endif
-        @if ($errors->has('gpa_3rd_year'))
-            <div class="max-w-5xl mx-auto p-4 bg-red-100 border border-red-400 text-red-700 rounded mb-2">
-                <strong>GPA Error:</strong> {{ $errors->first('gpa_3rd_year') }}
-            </div>
-        @endif
-        @if ($errors->has('gpa_4th_year'))
-            <div class="max-w-5xl mx-auto p-4 bg-red-100 border border-red-400 text-red-700 rounded mb-2">
-                <strong>GPA Error:</strong> {{ $errors->first('gpa_4th_year') }}
+        @if (session('error'))
+            <div class="max-w-5xl mx-auto p-4 bg-red-100 border border-red-400 text-red-700 rounded mb-4">
+                {{ session('error') }}
             </div>
         @endif
 
@@ -228,6 +246,28 @@
                 </div>
             </div>
 
+            <div class="grid md:grid-cols-1 gap-4">
+                <div>
+                    <label class="font-semibold">In Which Academic System Are You Studying?<span
+                            class="text-red-500">*</span></label>
+                    <select id="academic_system" name="academic_system"
+                        class="w-full border border-gray-400 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <option value="">Select System</option>
+                        <option value="yearly"
+                            {{ ($userDetails->academic_system ?? old('academic_system')) == 'yearly' ? 'selected' : '' }}>
+                            Yearly System</option>
+                        <option value="semester"
+                            {{ ($userDetails->academic_system ?? old('academic_system')) == 'semester' ? 'selected' : '' }}>
+                            Semester System</option>
+                    </select>
+                    <p class="text-red-500 text-sm mt-1 hidden" id="academic-system-error">Select academic system first
+                    </p>
+                    @error('academic_system')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+
             <!-- Current Year -->
             <div class="grid md:grid-cols-2 gap-4">
                 <div>
@@ -253,8 +293,8 @@
                     @enderror
                 </div>
 
-                <div>
-                    <label class="font-semibold">Current Semester</label>
+                <div class="hidden">
+                    <label class="font-semibold">Current Semester<span class="text-red-500">*</span></label>
                     <select id="current_semester" name="current_semester"
                         class="w-full border border-gray-400 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
                         <option value="">Select Semester</option>
@@ -272,41 +312,46 @@
             </div>
 
             <!-- GPA Section -->
-            <div id="gpa_fields"
-                class="grid md:grid-cols-2 gap-4 {{ $userDetails->current_year ?? '' ? '' : 'hidden' }}">
-                <div class="gpa gpa-1 {{ ($userDetails->current_year ?? 0) > 1 ? '' : 'hidden' }}">
-                    <label class="font-semibold">1st Year GPA/YGPA<span class="text-red-500">*</span></label>
-                    <input type="number" step="0.001" name="gpa_1st_year" placeholder=""
+            <div id="gpa_fields" class="grid md:grid-cols-2 gap-4 hidden">
+                @foreach ([1, 2, 3, 4] as $year)
+                    <div class="hidden gpa gpa-{{ $year }}">
+                        <label
+                            class="font-semibold">{{ $year }}{{ $year == 1 ? 'st' : ($year == 2 ? 'nd' : ($year == 3 ? 'rd' : 'th')) }}
+                            Year GPA/YGPA<span class="text-red-500">*</span></label>
+                        <input type="text" name="gpa_{{ $year }}_year" placeholder=""
+                            class="w-full border border-gray-400 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                            value="{{ $userDetails->{'gpa_' . $year . '_year'} ?? old('gpa_' . $year . '_year') }}">
+                        @error('gpa_' . $year . '_year')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                @endforeach
+            </div>
+
+            <div id="semester_gpa_fields" class="grid md:grid-cols-2 gap-4 hidden">
+                @foreach ([1, 2, 3, 4, 5, 6, 7, 8] as $semester)
+                    <div class="hidden semester-gpa semester-gpa-{{ $semester }}">
+                        <label
+                            class="font-semibold">{{ $semester }}{{ $semester == 1 ? 'st' : ($semester == 2 ? 'nd' : ($semester == 3 ? 'rd' : 'th')) }}
+                            Semester GPA<span class="text-red-500">*</span></label>
+                        <input type="text" name="semester_{{ $semester }}_gpa" placeholder=""
+                            class="w-full border border-gray-400 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                            value="{{ $userDetails->{'semester_' . $semester . '_gpa'} ?? old('semester_' . $semester . '_gpa') }}">
+                        @error('semester_' . $semester . '_gpa')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                @endforeach
+            </div>
+
+            <div id="last_highest_gpa" class="grid md:grid-cols-2 gap-4 hidden">
+                <div class="">
+                    <label class="font-semibold last_gpa_label">Last Highest GPA</label> <br>
+                    <small class="text-red-500">ভাইবা বোর্ডে সর্বোচ্চ জিপিএ এর প্রমাণ সাথে নিয়ে আসতে হবে।</small>
+                    <input type="text"3.5 name="last_highest_gpa" placeholder=""
                         class="w-full border border-gray-400 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                        value="{{ $userDetails->gpa_1st_year ?? old('gpa_1st_year') }}">
-                    @error('gpa_1st_year')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
-                <div class="gpa gpa-2 {{ ($userDetails->current_year ?? 0) > 2 ? '' : 'hidden' }}">
-                    <label class="font-semibold">2nd Year GPA/YGPA<span class="text-red-500">*</span></label>
-                    <input type="number" step="0.001" name="gpa_2nd_year" placeholder=""
-                        class="w-full border border-gray-400 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                        value="{{ $userDetails->gpa_2nd_year ?? old('gpa_2nd_year') }}">
-                    @error('gpa_2nd_year')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
-                <div class="gpa gpa-3 {{ ($userDetails->current_year ?? 0) > 3 ? '' : 'hidden' }}">
-                    <label class="font-semibold">3rd Year GPA/YGPA<span class="text-red-500">*</span></label>
-                    <input type="number" step="0.001" name="gpa_3rd_year" placeholder=""
-                        class="w-full border border-gray-400 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                        value="{{ $userDetails->gpa_3rd_year ?? old('gpa_3rd_year') }}">
-                    @error('gpa_3rd_year')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
-                <div class="gpa gpa-4 {{ ($userDetails->current_year ?? 0) > 4 ? '' : 'hidden' }}">
-                    <label class="font-semibold">4th Year GPA/YGPA<span class="text-red-500">*</span></label>
-                    <input type="number" step="0.001" name="gpa_4th_year" placeholder=""
-                        class="w-full border border-gray-400 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                        value="{{ $userDetails->gpa_4th_year ?? old('gpa_4th_year') }}">
-                    @error('gpa_4th_year')
+                        value="{{ $userDetails->last_highest_gpa ?? old('last_highest_gpa') }}">
+                    @error('last_highest_gpa')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
@@ -353,20 +398,13 @@
                 @endphp
 
                 @foreach ($certificates as $cert)
-                    <div class="border rounded-lg bg-gray-50">
-                        <label class="font-semibold block mb-2">{{ $cert['name'] }}</label>
-
-                        <!-- Certificate status dropdown -->
-                        <select name="{{ $cert['field'] }}"
-                            class="w-full border border-gray-400 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none mb-2">
-                            <option value="">Select Status</option>
-                            <option value="yes"
-                                {{ ($userDetails->{$cert['field']} ?? old($cert['field'])) == 'yes' ? 'selected' : '' }}>
-                                Yes</option>
-                            <option value="no"
-                                {{ ($userDetails->{$cert['field']} ?? old($cert['field'])) == 'no' ? 'selected' : '' }}>No
-                            </option>
-                        </select>
+                    <div class="border rounded-lg bg-gray-50 p-4">
+                        <label class="flex items-center font-semibold">
+                            <input type="checkbox" name="{{ $cert['field'] }}" value="yes"
+                                class="w-4 h-4 border border-gray-400 rounded focus:ring-2 focus:ring-blue-500"
+                                {{ ($userDetails->{$cert['field']} ?? old($cert['field'])) == 'yes' ? 'checked' : '' }}>
+                            <span class="ml-2">{{ $cert['name'] }}</span>
+                        </label>
 
                         @error($cert['field'])
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -388,36 +426,76 @@
 
 @section('scripts')
     <script>
-        const yearSelect = document.getElementById('current_year');
+        const academicSystemSelect = document.getElementById('academic_system');
+        const currentSemesterSelect = document.getElementById('current_semester');
+        const currentYearSelect = document.getElementById('current_year');
+        const lastHighestGpaLabel = document.querySelector('.last_gpa_label');
+        const lastHighestGpa = document.getElementById('last_highest_gpa');
+
         const gpaFields = document.getElementById('gpa_fields');
+        const semesterGpaFields = document.getElementById('semester_gpa_fields');
 
-        // Function to show/hide GPA fields
-        function updateGpaFields() {
-            const year = parseInt(yearSelect.value);
+        function handleAcademicSystem() {
+            if (academicSystemSelect.value === 'semester') {
+                currentSemesterSelect.parentElement.classList.remove('hidden');
 
-            if (year) {
-                // show container
-                gpaFields.classList.remove('hidden');
+                lastHighestGpaLabel.innerHTML = 'Last Semester Highest GPA <span class="text-red-500">*</span>';
+                lastHighestGpa.classList.remove('hidden');
+            } else if (academicSystemSelect.value === 'yearly') {
+                currentSemesterSelect.parentElement.classList.add('hidden');
 
-                // hide all
-                document.querySelectorAll('.gpa').forEach(el => el.classList.add('hidden'));
-
-                // show only required GPAs
-                for (let i = 1; i < year; i++) {
-                    const gpaField = document.querySelector('.gpa-' + i);
-                    if (gpaField) {
-                        gpaField.classList.remove('hidden');
-                    }
-                }
+                lastHighestGpaLabel.innerHTML = 'Last Year Highest GPA <span class="text-red-500">*</span>';
+                lastHighestGpa.classList.remove('hidden');
             } else {
-                gpaFields.classList.add('hidden');
+                currentSemesterSelect.parentElement.classList.add('hidden');
+                lastHighestGpa.classList.add('hidden');
             }
         }
 
-        // Initialize on page load
-        updateGpaFields();
+        function handleYearChange() {
+            const year = parseInt(currentYearSelect.value);
+            const semester = parseInt(currentSemesterSelect.value);
 
-        // Update when year selection changes
-        yearSelect.addEventListener('change', updateGpaFields);
+            document.querySelectorAll('.gpa').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.semester-gpa').forEach(el => el.classList.add('hidden'));
+
+            if (academicSystemSelect.value === 'semester') {
+                semesterGpaFields.classList.remove('hidden');
+                gpaFields.classList.add('hidden');
+
+                for (let i = 1; i <= (year - 1) * 2 + (semester - 1); i++) {
+                    const el = document.querySelector(`.semester-gpa-${i}`);
+                    if (el) el.classList.remove('hidden');
+                }
+
+            } else if (academicSystemSelect.value === 'yearly') {
+                gpaFields.classList.remove('hidden');
+                semesterGpaFields.classList.add('hidden');
+
+                for (let i = 1; i < year; i++) {
+                    const el = document.querySelector(`.gpa-${i}`);
+                    if (el) el.classList.remove('hidden');
+                }
+            }
+        }
+
+        // Event listeners
+        academicSystemSelect.addEventListener('change', function() {
+            handleAcademicSystem();
+
+            currentSemesterSelect.value = '';
+            currentYearSelect.value = '';
+            gpaFields.classList.add('hidden');
+            semesterGpaFields.classList.add('hidden');
+        });
+
+        currentYearSelect.addEventListener('change', handleYearChange);
+        currentSemesterSelect.addEventListener('change', handleYearChange);
+
+        // ✅ IMPORTANT: Run on page load (after validation)
+        window.addEventListener('DOMContentLoaded', function() {
+            handleAcademicSystem();
+            handleYearChange();
+        });
     </script>
 @endsection

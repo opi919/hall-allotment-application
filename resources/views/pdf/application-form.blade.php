@@ -158,13 +158,17 @@
     <table width="100%" border="1" cellpadding="6" cellspacing="0" style="border-collapse: collapse;">
         @foreach ([1, 2, 3, 4] as $year)
             {{ $yearName = $year == 1 ? '1st' : ($year == 2 ? '2nd' : ($year == 3 ? '3rd' : '4th')) }}
-            @if ($details->{'gpa_' . $yearName . '_year'})
+            @if ($details->{'gpa_' . $year . '_year'})
                 <tr>
-                    <td>{{ $yearName }} Year</td>
-                    <td style="width: 30%">{{ $details->{'gpa_' . $yearName . '_year'} ?? '-' }}</td>
+                    <td>{{ $yearName }} Year GPA/YGPA</td>
+                    <td style="width: 30%">{{ $details->{'gpa_' . $year . '_year'} ?? '-' }}</td>
                 </tr>
             @endif
         @endforeach
+        <tr>
+            <td>Last Highest GPA/YGPA</td>
+            <td style="width: 30%">{{ $details->last_highest_gpa ?? '-' }}</td>
+        </tr>
     </table>
 
     <h3 style="margin-top: 20px;">Extra-Curricular Activities</h3>

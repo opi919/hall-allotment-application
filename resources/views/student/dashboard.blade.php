@@ -25,12 +25,14 @@
                                 Welcome back, {{ $userDetails->name }}
                             </p>
                         </div>
-                        <div class="flex gap-3">
-                            <a href="{{ route('student.form.edit') }}"
-                                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors">
-                                Edit Information
-                            </a>
-                        </div>
+                        @if (App\Models\Setting::where('key', 'allow_application')->first()?->value)
+                            <div class="flex gap-3">
+                                <a href="{{ route('student.form.edit') }}"
+                                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors">
+                                    Edit Information
+                                </a>
+                            </div>
+                        @endif
                     </div>
                 </div>
 
@@ -65,7 +67,7 @@
                             <div class="flex flex-col sm:flex-row sm:justify-between gap-1">
                                 <span class="text-gray-500 mb-2 lg:mb-0">Status</span>
                                 <div>
-                                    @if ($bill->payment_status != 1)
+                                    @if ($bill->payment_status != 1 && App\Models\Setting::where('key', 'allow_payment')->first()?->value)
                                         <a href="{{ route('payment.init', $bill->id) }}"
                                             class="ml-4 px-6 py-2 bg-red-600 text-white rounded-lg text-sm font-medium mr-2">
                                             Pay Now
@@ -220,18 +222,25 @@
 
                         <div class="space-y-3 text-sm sm:text-base">
                             @foreach ([
-            '1st Year' => $details->gpa_1st_year,
-            '2nd Year' => $details->gpa_2nd_year,
-            '3rd Year' => $details->gpa_3rd_year,
-            '4th Year' => $details->gpa_4th_year,
+            '1st Year GPA/YGPA' => $details->gpa_1_year,
+            '2nd Year GPA/YGPA' => $details->gpa_2_year,
+            '3rd Year GPA/YGPA' => $details->gpa_3_year,
+            '4th Year GPA/YGPA' => $details->gpa_4_year,
         ] as $year => $gpa)
                                 <div class="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center gap-1">
                                     <span>{{ $year }}</span>
-                                    <span class="px-3 py-1 rounded-lg bg-green-100 text-green-700 font-medium">
+                                    <span
+                                        class="px-3 py-1 rounded-lg {{ $gpa ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }} font-medium">
                                         {{ $gpa ?? '-' }}
                                     </span>
                                 </div>
                             @endforeach
+                            <div class="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center gap-1">
+                                <span>Last Highest GPA/YGPA</span>
+                                <span class="px-3 py-1 rounded-lg bg-green-100 text-green-700 font-medium">
+                                    {{ $details->last_highest_gpa ?? '-' }}
+                                </span>
+                            </div>
                         </div>
                     </div>
 

@@ -6,11 +6,17 @@ use App\Models\Bill;
 use App\Models\UserDetails;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class PaymentController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('allowApplication');
+    }
+
     public function initPayment($id)
     {
         $bill = Bill::findOrFail($id);

@@ -351,7 +351,7 @@
                         class="inline-block mt-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
                         Dashboard
                     </a>
-                @else
+                @elseif(App\Models\Setting::where('key', 'allow_application')->first()?->value)
                     <a href="{{ route('login') }}"
                         class="inline-block mt-6 px-12 py-2 bg-blue-600 hover:bg-blue-800 text-white rounded hover:bg-blue-700 transition">
                         Login
