@@ -67,7 +67,7 @@
                             <div class="flex flex-col sm:flex-row sm:justify-between gap-1">
                                 <span class="text-gray-500 mb-2 lg:mb-0">Status</span>
                                 <div>
-                                    @if ($bill->payment_status != 1 && App\Models\Setting::where('key', 'allow_payment')->first()?->value)
+                                    @if (!$bill->payment_status && App\Models\Setting::where('key', 'allow_payment')->first()?->value)
                                         <a href="{{ route('payment.init', $bill->id) }}"
                                             class="ml-4 px-6 py-2 bg-red-600 text-white rounded-lg text-sm font-medium mr-2">
                                             Pay Now
