@@ -308,12 +308,12 @@ class StudentDashboardController extends Controller
                 if ($i % 2 == 0) {
                     $year = $i / 2;
                     if (isset($validated["semester_{$i}_gpa"]) && isset($validated["semester_" . ($i - 1) . "_gpa"])) {
-                        $validated["gpa_{$year}_year"] = round(($validated["semester_{$i}_gpa"] + $validated["semester_" . ($i - 1) . "_gpa"]) / 2, 2);
+                        $validated["gpa_{$year}_year"] = round(($validated["semester_{$i}_gpa"] + $validated["semester_" . ($i - 1) . "_gpa"]) / 2, 3);
                     }
                 } else if ($i == $completedSemesters && $currentSemester == 2) {
                     $year = ceil($i / 2);
                     if (isset($validated["semester_{$i}_gpa"])) {
-                        $validated["gpa_{$year}_year"] = round($validated["semester_{$i}_gpa"], 2);
+                        $validated["gpa_{$year}_year"] = round($validated["semester_{$i}_gpa"], 3);
                     }
                 }
             }
