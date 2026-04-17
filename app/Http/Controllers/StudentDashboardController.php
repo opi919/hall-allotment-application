@@ -345,6 +345,7 @@ class StudentDashboardController extends Controller
                 'journalism_certificate' => $validated['journalism_certificate'] ?? null,
                 'bncc_certificate' => $validated['bncc_certificate'] ?? null,
                 'roverscout_certificate' => $validated['roverscout_certificate'] ?? null,
+                'blood_donor' => $validated['blood_donor'] ?? null,
             ];
 
             // Add GPA fields based on academic system
