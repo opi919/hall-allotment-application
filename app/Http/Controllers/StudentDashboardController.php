@@ -339,13 +339,12 @@ class StudentDashboardController extends Controller
                 'current_year' => $validated['current_year'],
                 'current_semester' => $validated['current_semester'] ?? null,
                 'last_highest_gpa' => $validated['last_highest_gpa'],
-                'international_certificate' => $validated['international_certificate'] == 'yes' ? 'yes' : null,
-                'national_certificate' => $validated['national_certificate'] == 'yes' ? 'yes' : null,
-                'university_certificate' => $validated['university_certificate'] == 'yes' ? 'yes' : null,
-                'journalism_certificate' => $validated['journalism_certificate'] == 'yes' ? 'yes' : null,
-                'bncc_certificate' => $validated['bncc_certificate'] == 'yes' ? 'yes' : null,
-                'roverscout_certificate' => $validated['roverscout_certificate'] == 'yes' ? 'yes' : null,
-                'blood_donor' => $validated['blood_donor'] == 'yes' ? 'yes' : null,
+                'international_certificate' => $validated['international_certificate'] ?? null,
+                'national_certificate' => $validated['national_certificate'] ?? null,
+                'university_certificate' => $validated['university_certificate'] ?? null,
+                'journalism_certificate' => $validated['journalism_certificate'] ?? null,
+                'bncc_certificate' => $validated['bncc_certificate'] ?? null,
+                'roverscout_certificate' => $validated['roverscout_certificate'] ?? null,
             ];
 
             // Add GPA fields based on academic system
