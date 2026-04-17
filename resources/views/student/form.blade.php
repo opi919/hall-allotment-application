@@ -24,10 +24,9 @@
             </div>
         @endif
 
-        @if ($dept_code == 130 || $dept_code == 131 || $dept_code == 132)
+        @if ($hall_code == 130 || $hall_code == 131 || $hall_code == 132)
             <div class="max-w-5xl mx-auto p-4 bg-yellow-100 border border-yellow-400 text-yellow-700 rounded mb-4">
-                <strong>Notice:</strong> Students from IBA are not eligible to apply for hall
-                residency.
+                <strong>Notice:</strong> {{ $hall_name }} is not accepting applications at the moment.
             </div>
         @else
             <form method="POST" action="{{ route('student.form.submit') }}"

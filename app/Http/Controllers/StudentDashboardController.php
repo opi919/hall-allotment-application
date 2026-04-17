@@ -54,7 +54,6 @@ class StudentDashboardController extends Controller
 
             $data['username'] = $user->username;
             $data['name'] = $user->name;
-            $data['dept_code'] = $dept_code;
             $data['department'] = $department->name;
             //session = first two digit of the username
             $session = substr($user->username, 0, 2);
@@ -64,6 +63,7 @@ class StudentDashboardController extends Controller
             $hall_code = substr($user->username, 2, 3);
             $hall_name = Hall::where('code', $hall_code)->first();
             $data['hall_name'] = $hall_name->name;
+            $data['hall_code'] = $hall_code;
         } catch (\Exception $e) {
             Log::error('Error fetching department or hall information', ['error' => $e->getMessage(), 'username' => $user->name, 'department' => $user->department]);
             throw new \Exception('Error fetching department or hall information');
