@@ -48,8 +48,9 @@ class StudentDashboardController extends Controller
         }
 
         try {
-            $department = strtolower(str_replace('&', 'and', $user->department));
-            $department = Department::where('name', $department)->first();
+            //dept_code = sixth and seventh digit of the username
+            $dept_code = substr($user->username, 5, 2);
+            $department = Department::where('code', $dept_code)->first();
 
             $data['username'] = $user->username;
             $data['name'] = $user->name;
