@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Hall Allotment Application</title>
+    <title>Hall Residency Application</title>
 </head>
 
 <body style="font-family: sans-serif; font-size: 12px; color: #333;">

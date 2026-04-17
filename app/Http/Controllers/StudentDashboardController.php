@@ -54,6 +54,7 @@ class StudentDashboardController extends Controller
 
             $data['username'] = $user->username;
             $data['name'] = $user->name;
+            $data['dept_code'] = $dept_code;
             $data['department'] = $department->name;
             //session = first two digit of the username
             $session = substr($user->username, 0, 2);

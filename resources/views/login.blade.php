@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Login - Hall Allotment Application')
+@section('title', 'Login - Hall Residency Application')
 @section('content')
     <div class="min-h-screen bg-gray-100 flex items-center justify-center">
         <div
