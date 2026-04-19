@@ -107,7 +107,8 @@
                         <div class="ml-4">
                             <p class="text-sm font-medium text-gray-600">Total Revenue</p>
                             <p class="text-2xl font-semibold text-gray-900">
-                                ৳{{ number_format(\App\Models\Bill::where('payment_status', 1)->sum('amount'), 2) }}</p>
+                                ৳{{ number_format(\App\Models\Bill::where('payment_status', 1)->sum('amount') - 5 * \App\Models\Bill::where('payment_status', 1)->count(), 2) }}
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -175,7 +176,7 @@
                                         </td>
                                         <td class="px-4 py-4 whitespace-nowrap text-center">
                                             <span class="text-sm font-medium text-gray-900">
-                                                ৳{{ number_format($stat->total_revenue, 2) }}
+                                                ৳{{ number_format($stat->total_revenue - 5 * $stat->paid_applications, 2) }}
                                             </span>
                                         </td>
                                         <td class="px-4 py-4 whitespace-nowrap text-center">
