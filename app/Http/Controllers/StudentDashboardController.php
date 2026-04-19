@@ -78,7 +78,7 @@ class StudentDashboardController extends Controller
         $rules = [
             'username' => 'required|unique:user_details,username',
             'name' => 'required|string|max:255',
-            'name_bangla' => 'required|regex:/^[\p{Bengali}\s]+$/u',
+            'name_bangla' => 'required|regex:/^[\p{Bengali}\s\(\)\-\,\.\।_]+$/u',
             'fname' => 'required|string|max:255',
             'faculty' => 'required|string|max:255',
             'department' => 'required|string|max:255',
@@ -228,7 +228,7 @@ class StudentDashboardController extends Controller
 
         // Base validation rules
         $rules = [
-            'name_bangla' => 'required|regex:/^[\p{Bengali}\s]+$/u',
+            'name_bangla' => 'required|regex:/^[\p{Bengali}\s\(\)\-\,\.\।_]+$/u',
             'fname' => 'required',
             'session' => 'required',
             'email' => 'required|email|unique:user_details,email,' . $userDetails->id,
