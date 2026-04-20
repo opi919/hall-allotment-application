@@ -13,9 +13,12 @@
                     No detailed profile information found.
                 </div>
             @else
-                <div>
-
-                </div>
+                @if (!$bill->payment_status)
+                    <div class="bg-yellow-100 border border-yellow-300 text-yellow-800 p-4 rounded-xl">
+                        <strong>Notice:</strong>পেমেন্ট সম্পন্ন হওয়ার (টাকা কেটে নেওয়ার পর) পরও যদি UNPAID দেখায়, তাহলে
+                        Pay Now বাটনে আবার ক্লিক করলে সমস্যাটি সমাধান হয়ে যাবে।
+                    </div>
+                @endif
                 <!-- Header -->
                 <div class="mb-6 sm:mb-8">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
