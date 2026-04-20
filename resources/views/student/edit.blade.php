@@ -363,56 +363,16 @@
 
             <!-- Certificates -->
             <div class="grid md:grid-cols-2 gap-4">
-                @php
-                    $certificates = [
-                        [
-                            'field' => 'international_certificate',
-                            'path_field' => 'international_certificate_path',
-                            'name' => 'International Certificate',
-                        ],
-                        [
-                            'field' => 'national_certificate',
-                            'path_field' => 'national_certificate_path',
-                            'name' => 'National Certificate',
-                        ],
-                        [
-                            'field' => 'university_certificate',
-                            'path_field' => 'university_certificate_path',
-                            'name' => 'University Certificate',
-                        ],
-                        [
-                            'field' => 'journalism_certificate',
-                            'path_field' => 'journalism_certificate_path',
-                            'name' => 'Journalism Certificate',
-                        ],
-                        [
-                            'field' => 'bncc_certificate',
-                            'path_field' => 'bncc_certificate_path',
-                            'name' => 'BNCC Certificate',
-                        ],
-                        [
-                            'field' => 'roverscout_certificate',
-                            'path_field' => 'roverscout_certificate_path',
-                            'name' => 'Rover/Scout Certificate',
-                        ],
-                        [
-                            'field' => 'blood_donor',
-                            'path_field' => 'blood_donor_path',
-                            'name' => 'Involvement with Blood Donation Organizations',
-                        ],
-                    ];
-                @endphp
-
-                @foreach ($certificates as $cert)
-                    <div class="border rounded-lg bg-gray-50 p-4">
-                        <label class="flex items-center font-semibold">
-                            <input type="checkbox" name="{{ $cert['field'] }}" value="yes"
-                                class="w-4 h-4 border border-gray-400 rounded focus:ring-2 focus:ring-blue-500"
-                                {{ ($userDetails->{$cert['field']} ?? old($cert['field'])) == 'yes' ? 'checked' : '' }}>
-                            <span class="ml-2">{{ $cert['name'] }}</span>
+                @foreach (App\ExtraCurricular::cases() as $activity)
+                    <div class="flex items-center">
+                        <input type="checkbox" name="{{ $activity->certificateField() }}" value="yes"
+                            id="{{ $activity->certificateField() }}"
+                            class="w-4 h-4 border border-gray-400 rounded focus:ring-2 focus:ring-blue-500"
+                            {{ old($activity->certificateField(), $userDetails->{$activity->certificateField()}) == 'yes' ? 'checked' : '' }}>
+                        <label for="{{ $activity->certificateField() }}" class="font-semibold ml-2 cursor-pointer">
+                            {{ $activity->displayName() }}
                         </label>
-
-                        @error($cert['field'])
+                        @error($activity->certificateField())
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
@@ -444,15 +404,9 @@
         function handleAcademicSystem() {
             if (academicSystemSelect.value === 'semester') {
                 currentSemesterSelect.parentElement.classList.remove('hidden');
-
-                lastHighestGpaLabel.innerHTML =
-                    'Highest GPA/SGPA/YGPA/CGPA in the Applicant’s Latest Result Sheet <span class="text-red-500">*</span>';
                 lastHighestGpa.classList.remove('hidden');
             } else if (academicSystemSelect.value === 'yearly') {
                 currentSemesterSelect.parentElement.classList.add('hidden');
-
-                lastHighestGpaLabel.innerHTML =
-                    'Highest GPA/SGPA/YGPA/CGPA in the Applicant’s Latest Result Sheet <span class="text-red-500">*</span>';
                 lastHighestGpa.classList.remove('hidden');
             } else {
                 currentSemesterSelect.parentElement.classList.add('hidden');
