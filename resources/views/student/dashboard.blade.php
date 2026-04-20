@@ -13,12 +13,6 @@
                     No detailed profile information found.
                 </div>
             @else
-                @if (!$bill->payment_status)
-                    <div class="bg-yellow-100 border border-yellow-300 text-yellow-800 p-4 rounded-xl">
-                        <strong>Notice:</strong>পেমেন্ট সম্পন্ন হওয়ার (টাকা কেটে নেওয়ার পর) পরও যদি UNPAID দেখায়, তাহলে
-                        Pay Now বাটনে আবার ক্লিক করলে সমস্যাটি সমাধান হয়ে যাবে।
-                    </div>
-                @endif
                 <!-- Header -->
                 <div class="mb-6 sm:mb-8">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -51,6 +45,12 @@
                     </div>
                 @endif
 
+                @if (!$bill->payment_status)
+                    <div class="bg-yellow-100 border border-yellow-300 text-yellow-800 p-4 rounded-xl">
+                        <strong>Notice:</strong> পেমেন্ট সম্পন্ন হওয়ার (টাকা কেটে নেওয়ার পর) পরও যদি UNPAID দেখায়, তাহলে
+                        Pay Now বাটনে আবার ক্লিক করলে সমস্যাটি সমাধান হয়ে যাবে।
+                    </div>
+                @endif
                 <!-- Top Grid -->
                 <div class="mb-2 sm:mb-4 pt-4 border-t grid grid-cols-1 gap-4 sm:gap-6">
                     <div class="bg-white rounded-2xl shadow-sm p-4 sm:p-6">
