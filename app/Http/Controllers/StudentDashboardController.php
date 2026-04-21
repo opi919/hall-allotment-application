@@ -214,7 +214,7 @@ class StudentDashboardController extends Controller
             return redirect()->route('student.form')->with('error', 'Please fill out the form first.');
         }
 
-        return view('student.edit', compact('userDetails'));
+        return view('student.edit', compact('userDetails', 'user'));
     }
 
     public function update(Request $request)
