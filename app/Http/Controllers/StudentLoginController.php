@@ -35,8 +35,7 @@ class StudentLoginController extends Controller
         }
 
         //check if user exists in database, if not create a new user
-        $user = User::where('username', $credentials['internet_id'])->first();
-        $user = User::createOrUpdate(
+        User::updateOrCreate(
             ['username' => $credentials['internet_id']],
             [
                 'name' => $response['name'],
