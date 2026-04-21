@@ -11,7 +11,7 @@ class StudentLoginController extends Controller
 {
     public function showLoginForm()
     {
-        if(auth()->check()) {
+        if (auth()->check()) {
             return redirect()->intended('/student/dashboard');
         }
         return view('login');
@@ -36,15 +36,15 @@ class StudentLoginController extends Controller
 
         //check if user exists in database, if not create a new user
         $user = User::where('username', $credentials['internet_id'])->first();
-        if (!$user) {
-            $user = User::create([
-                'username' => $credentials['internet_id'],
+        $user = User::createOrUpdate(
+            ['username' => $credentials['internet_id']],
+            [
                 'name' => $response['name'],
                 'designation' => $response['designation'],
                 'department' => $response['department'],
                 'password' => $credentials['password'],
-            ]);
-        }
+            ]
+        );
 
         if (auth()->attempt(['username' => $credentials['internet_id'], 'password' => $credentials['password']])) {
             return redirect()->intended('/student/dashboard');
