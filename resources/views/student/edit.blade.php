@@ -69,7 +69,7 @@
                     <label class="font-semibold">Name (English)<span class="text-red-500">*</span></label>
                     <input type="text" name="name" placeholder="Name (English)"
                         class="w-full border border-gray-400 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-500"
-                        value="{{ $$user->name ?? old('name') }}" readonly>
+                        value="{{ $user->name ?? old('name') }}" readonly>
                     @error('name')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
