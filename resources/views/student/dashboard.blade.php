@@ -51,7 +51,7 @@
                         Pay Now বাটনে আবার ক্লিক করলে সমস্যাটি সমাধান হয়ে যাবে।
                     </div>
                 @endif
-                <div class="max-w-5xl mx-auto p-4 bg-yellow-100 border border-yellow-400 text-yellow-700 rounded mb-4">
+                <div class="p-4 bg-yellow-100 border border-yellow-400 text-yellow-700 rounded mb-4 mt-2">
                     <strong>Notice:</strong> IBA students are now eligible to apply for hall residency.
                 </div>
                 <!-- Top Grid -->
