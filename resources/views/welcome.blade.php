@@ -178,6 +178,10 @@
                 <p class="meta">এপ্রিল ২০২৬</p>
             </div>
 
+            <div class="max-w-5xl mx-auto p-4 bg-yellow-100 border border-yellow-400 text-yellow-700 rounded mb-4 mt-4">
+                <strong>Notice:</strong> IBA students are now eligible to apply for hall residency.
+            </div>
+
             <div class="section-block">
                 <p>রাজশাহী বিশ্ববিদ্যালয়ের আবাসিক হল সমূহে একটি ন্যায্য এবং সুশৃঙ্খল বরাদ্দ প্রক্রিয়া নিশ্চিত করার
                     পাশাপাশি হলের মধ্যে শৃঙ্খলা ও বাসযোগ্য পরিবেশ বজায় রাখার লক্ষ্যে নিম্নোক্ত নীতিমালার আলোকে আবাসিক
