@@ -111,7 +111,7 @@ class ExportData extends Command
                     $user->gpa_3_year ? number_format((float)$user->gpa_3_year, 3, '.', '') : null,
                     $user->gpa_4_year ? number_format((float)$user->gpa_4_year, 3, '.', '') : null,
                     $user->last_highest_gpa ? number_format((float)$user->last_highest_gpa, 3, '.', '') : null,
-                    $user->current_year,
+                    $user->current_year == 5 ? 'Masters' : $user->current_year,
                     $user->calculated_score, // Using the property we created in step 2
                     $user->bill->payment_status == 1 ? 'Paid' : null,
                 ]);
