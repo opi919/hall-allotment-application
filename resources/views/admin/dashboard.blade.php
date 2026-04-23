@@ -115,8 +115,9 @@
             </div>
 
             <div class="mb-8">
-                <h3 class="text-xl font-semibold text-red-800">Application Timeline {{ $settings['start_date'] }} -
-                    {{ $settings['end_date'] }}</h3>
+                <h3 class="text-xl font-semibold text-center">Application Timeline <strong
+                        class="text-red-800">{{ $settings['start_date'] }} -
+                        {{ $settings['end_date'] }}</strong></h3>
             </div>
 
             <!-- Hall-wise Statistics -->
