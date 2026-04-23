@@ -32,10 +32,22 @@ class ExportData extends Command
         $halls = Hall::all();
 
         foreach ($halls as $hall) {
+            $additionalHall = null;
+            if ($hall->code == '111') {
+                $additionalHall = Hall::where('code', '112')->first();
+            } else if ($hall->code == '125') {
+                $additionalHall = Hall::where('code', '126')->first();
+            }
             $filename = storage_path('app/public/' . $hall->name . '_data.xlsx');
 
             // Eager load 'bill' to prevent N+1 query performance issues
-            $users = UserDetails::with('bill')->where('hall_name', $hall->name)->get();
+            if ($additionalHall) {
+                $users = UserDetails::with('bill')
+                    ->whereIn('hall_name', [$hall->name, $additionalHall->name])
+                    ->get();
+            } else {
+                $users = UserDetails::with('bill')->where('hall_name', $hall->name)->get();
+            }
             $headers = ['ID', 'Name', 'Department', 'Session', 'Hall', '1st Year GPA', '2nd Year GPA', '3rd Year GPA', '4th Year GPA', 'Highest GPA', 'Current Year', 'Score', 'Payment Status'];
 
             $writer = SimpleExcelWriter::create($filename)
@@ -101,7 +113,7 @@ class ExportData extends Command
                     $user->last_highest_gpa ? number_format((float)$user->last_highest_gpa, 3, '.', '') : null,
                     $user->current_year,
                     $user->calculated_score, // Using the property we created in step 2
-                    $user->bill->payment_status,
+                    $user->bill->payment_status == 1 ? 'Paid' : null,
                 ]);
             }
 
