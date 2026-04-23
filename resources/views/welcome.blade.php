@@ -178,8 +178,11 @@
                 <p class="meta">এপ্রিল ২০২৬</p>
             </div>
 
-            <div class="max-w-5xl mx-auto p-4 bg-yellow-100 border border-yellow-400 text-yellow-700 rounded mb-4 mt-4">
-                <strong>Notice:</strong> IBA students are now eligible to apply for hall residency.
+            <div class="max-w-5xl mx-auto p-4 bg-red-100 border border-red-400 text-red-700 rounded mb-4 mt-4 text-center text-2xl font-semibold"
+                id="countdown-container">
+                <span id="application-countdown-container" class="ml-2 inline-block align-middle">
+                    <span id="application-countdown" class="text-red-600 font-semibold"></span>
+                </span>
             </div>
 
             <div class="section-block">
@@ -223,13 +226,15 @@
 
             <h2 class="section">২. আবেদন প্রক্রিয়া</h2>
             <ul class="list-disc pl-5">
-                <li>সকল হলের জন্য যোগ্য শিক্ষার্থীদের নিজ নিজ হল থেকে আগামী <strong>{{ $settings['start_date'] }}</strong> থেকে
-                    <strong>{{ $settings['end_date'] }}</strong> তারিখ পর্যন্ত <strong>অনলাইনে</strong> আবেদন করতে হবে। আবেদনের লিংক: <a
-                        href="https://csd.ru.ac.bd/residency/login" rel="noopener"
+                <li>সকল হলের জন্য যোগ্য শিক্ষার্থীদের নিজ নিজ হল থেকে আগামী <strong>{{ $settings['start_date'] }}</strong>
+                    থেকে
+                    <strong>{{ $settings['end_date'] }}</strong> তারিখ পর্যন্ত <strong>অনলাইনে</strong> আবেদন করতে হবে।
+                    আবেদনের লিংক: <a href="https://csd.ru.ac.bd/residency/login" rel="noopener"
                         class="text-blue-500 underline">https://csd.ru.ac.bd/residency/login</a>
                 </li>
                 <li>অনলাইনে আবেদন ফরম পূরণ করার পর অনলাইনের মাধ্যমে ৫৫ টাকা জমা দিতে হবে। পূরণকৃত আবেদন ফরম এবং নিম্নোক্ত
-                    প্রয়োজনীয় কাগজপত্র আগামী ২৬/০৪/২০২৬ তারিখের মধ্যে নিজ নিজ হলে অফিস চলাকালীন সময়ে জমা দিতে হবে।</li>
+                    প্রয়োজনীয় কাগজপত্র আগামী {{ Carbon\Carbon::now()->addDays(1)->format('d-m-Y') }} তারিখের মধ্যে নিজ নিজ
+                    হলে অফিস চলাকালীন সময়ে জমা দিতে হবে।</li>
                 <li>প্রদানকৃত সকল তথ্য হল প্রশাসন কর্তৃক যাচাই করা হবে। আবেদনের সময় কোনো ভুল বা মিথ্যা তথ্য প্রদান করা হলে
                     আবেদন বাতিল বলে গণ্য হবে।</li>
                 <li>আবেদনকারী শিক্ষার্থীদের সাক্ষাৎকারের জন্য ডাকা হবে। সাক্ষাৎকারের সময় সমস্ত কাগজপত্রের মূলকপি সঙ্গে
@@ -364,6 +369,70 @@
                     </a>
                 @endif
             </div>
+
         </section>
     </div>
+@endsection
+
+@section('scripts')
+    <script>
+        (function() {
+            // If settings end_date is not available, do nothing
+            @if (isset($settings['end_date']) && $settings['end_date'])
+                // send date in YYYY-MM-DD and construct end-of-day on client to avoid timezone/parsing issues
+                const endDateStr = @json(\Carbon\Carbon::parse($settings['end_date'])->toDateString()); // e.g. "2026-04-24"
+                const edParts = endDateStr.split('-').map(Number);
+                const endTs = new Date(edParts[0], edParts[1] - 1, edParts[2], 0, 0, 0, 0).getTime();
+            @else
+                return;
+            @endif
+
+            const countdownEl = document.getElementById('application-countdown');
+            const containerEl = document.getElementById('application-countdown-container');
+            if (!countdownEl || !containerEl) return;
+
+            function pad(n) {
+                return n < 10 ? '0' + n : n;
+            }
+
+            function update() {
+                const now = Date.now();
+                const diffMs = endTs - now;
+
+                if (diffMs <= 0) {
+                    countdownEl.textContent = ' - আবেদনের সময় শেষ (Applications Closed)';
+                    clearInterval(timer);
+                    return;
+                }
+
+                const diffHours = diffMs / (1000 * 60 * 60);
+
+                if (diffHours <= 72) {
+                    // show countdown
+                    const totalSeconds = Math.floor(diffMs / 1000);
+                    const days = Math.floor(totalSeconds / (3600 * 24));
+                    const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
+                    const minutes = Math.floor((totalSeconds % 3600) / 60);
+                    const seconds = totalSeconds % 60;
+
+                    let parts = [];
+                    if (days > 0) parts.push(days + 'd');
+                    parts.push(pad(hours) + 'h');
+                    parts.push(pad(minutes) + 'm');
+                    parts.push(pad(seconds) + 's');
+
+                    countdownEl.textContent = 'Time Remaining: ' + parts.join(' ');
+                    containerEl.style.display = 'inline-block';
+                } else {
+                    // hide countdown until 72h window
+                    countdownEl.textContent = '';
+                    containerEl.style.display = 'none';
+                    document.getElementById('countdown-container').style.display = 'none';
+                }
+            }
+
+            update();
+            const timer = setInterval(update, 1000);
+        })();
+    </script>
 @endsection
