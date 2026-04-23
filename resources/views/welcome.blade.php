@@ -223,8 +223,8 @@
 
             <h2 class="section">২. আবেদন প্রক্রিয়া</h2>
             <ul class="list-disc pl-5">
-                <li>সকল হলের জন্য যোগ্য শিক্ষার্থীদের নিজ নিজ হল থেকে আগামী <strong>{{ setting('start_date') }}</strong> থেকে
-                    <strong>{{ setting('end_date') }}</strong> তারিখ পর্যন্ত <strong>অনলাইনে</strong> আবেদন করতে হবে। আবেদনের লিংক: <a
+                <li>সকল হলের জন্য যোগ্য শিক্ষার্থীদের নিজ নিজ হল থেকে আগামী <strong>{{ setting('start_date')->value('format', 'd/m/Y') }}</strong> থেকে
+                    <strong>{{ setting('end_date')->value('format', 'd/m/Y') }}</strong> তারিখ পর্যন্ত <strong>অনলাইনে</strong> আবেদন করতে হবে। আবেদনের লিংক: <a
                         href="https://csd.ru.ac.bd/residency/login" rel="noopener"
                         class="text-blue-500 underline">https://csd.ru.ac.bd/residency/login</a>
                 </li>
