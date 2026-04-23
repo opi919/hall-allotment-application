@@ -54,8 +54,8 @@ class ExportData extends Command
 
                 $extra_score = 0;
                 foreach (ExtraCurricular::cases() as $activity) {
-                    if ($user->{$activity->certificateField()}) {
-                        $extra_score += $activity->score();
+                    if ($user->{$activity->certificateField()} == 'yes') {
+                        $extra_score += 1;
                     }
                 }
                 $extra_score = min($extra_score, 3); // Cap the extra score at 3
