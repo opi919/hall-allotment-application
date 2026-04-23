@@ -47,6 +47,7 @@ class ExportData extends Command
             });
 
             // 2. Map through the collection to calculate and temporarily store the score
+            // 2. Map through the collection to calculate and temporarily store the score
             $processedUsers = $filteredUsers->map(function ($user) {
                 $last_gpa = null;
                 if ($user->gpa_4_year) {
@@ -67,8 +68,12 @@ class ExportData extends Command
                 }
                 $extra_score = min($extra_score, 3); // Cap the extra score at 3
 
-                // Save the calculated score directly onto the user object dynamically
+                // Save the calculated score
                 $user->calculated_score = ($last_gpa / $user->last_highest_gpa) * 47 + $extra_score;
+
+                // NEW: Extract the first part of the session (e.g., '2022' from '2022-23')
+                // We cast it to an integer (int) to ensure it sorts mathematically
+                $user->session_start_year = (int) explode('-', $user->session)[0];
 
                 return $user;
             });
@@ -76,8 +81,9 @@ class ExportData extends Command
             // 3. Sort the mapped collection
             // Note: I set score to 'desc' (highest score first). Change to 'asc' if needed.
             $sortedUsers = $processedUsers->sortBy([
-                ['current_year', 'asc'],
-                ['session', 'asc'],
+                ['current_year', 'desc'],
+                ['current_semester', 'desc'],
+                ['session_start_year', 'asc'],
                 ['calculated_score', 'desc'],
             ]);
 
