@@ -4,10 +4,12 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\StudentDashboardController;
 use App\Http\Controllers\StudentLoginController;
+use App\Models\Setting;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    $settings = Setting::all()->pluck('value', 'key')->toArray();
+    return view('welcome', compact('settings'));
 })->name('home');
 
 Route::controller(StudentLoginController::class)->group(function () {
