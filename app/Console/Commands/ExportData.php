@@ -69,7 +69,7 @@ class ExportData extends Command
                 $extra_score = min($extra_score, 3); // Cap the extra score at 3
 
                 // Save the calculated score
-                $user->calculated_score = ($last_gpa / $user->last_highest_gpa) * 47 + $extra_score;
+                $user->calculated_score = round(($last_gpa / $user->last_highest_gpa) * 47 + $extra_score);
 
                 // NEW: Extract the first part of the session (e.g., '2022' from '2022-23')
                 // We cast it to an integer (int) to ensure it sorts mathematically
