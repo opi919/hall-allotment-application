@@ -408,28 +408,28 @@
 
                 const diffHours = diffMs / (1000 * 60 * 60);
 
-                if (diffHours <= 72) {
-                    // show countdown
-                    const totalSeconds = Math.floor(diffMs / 1000);
-                    const days = Math.floor(totalSeconds / (3600 * 24));
-                    const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
-                    const minutes = Math.floor((totalSeconds % 3600) / 60);
-                    const seconds = totalSeconds % 60;
+                // if (diffHours <= 72) {
+                // show countdown
+                const totalSeconds = Math.floor(diffMs / 1000);
+                const days = Math.floor(totalSeconds / (3600 * 24));
+                const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
+                const minutes = Math.floor((totalSeconds % 3600) / 60);
+                const seconds = totalSeconds % 60;
 
-                    let parts = [];
-                    if (days > 0) parts.push(days + 'd');
-                    parts.push(pad(hours) + 'h');
-                    parts.push(pad(minutes) + 'm');
-                    parts.push(pad(seconds) + 's');
+                let parts = [];
+                if (days > 0) parts.push(days + 'd');
+                parts.push(pad(hours) + 'h');
+                parts.push(pad(minutes) + 'm');
+                parts.push(pad(seconds) + 's');
 
-                    countdownEl.textContent = 'Time Remaining: ' + parts.join(' ');
-                    containerEl.style.display = 'inline-block';
-                } else {
-                    // hide countdown until 72h window
-                    countdownEl.textContent = '';
-                    containerEl.style.display = 'none';
-                    document.getElementById('countdown-container').style.display = 'none';
-                }
+                countdownEl.textContent = 'Time Remaining: ' + parts.join(' ');
+                containerEl.style.display = 'inline-block';
+                // } else {
+                //     // hide countdown until 72h window
+                //     countdownEl.textContent = '';
+                //     containerEl.style.display = 'none';
+                //     document.getElementById('countdown-container').style.display = 'none';
+                // }
             }
 
             update();
