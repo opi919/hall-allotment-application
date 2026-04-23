@@ -36,7 +36,7 @@ class ExportData extends Command
 
             // Eager load 'bill' to prevent N+1 query performance issues
             $users = UserDetails::with('bill')->where('hall_name', $hall->name)->get();
-            $headers = ['ID', 'Name', 'Department', 'Session', 'Hall', '1st Year GPA', '2nd Year GPA', '3rd Year GPA', '4th Year GPA', 'Highest GPA', 'Current Year', 'Current Semester', 'Score', 'Payment Status'];
+            $headers = ['ID', 'Name', 'Department', 'Session', 'Hall', '1st Year GPA', '2nd Year GPA', '3rd Year GPA', '4th Year GPA', 'Highest GPA', 'Current Year', 'Score', 'Payment Status'];
 
             $writer = SimpleExcelWriter::create($filename)
                 ->addHeader($headers);
@@ -82,7 +82,6 @@ class ExportData extends Command
             // Note: I set score to 'desc' (highest score first). Change to 'asc' if needed.
             $sortedUsers = $processedUsers->sortBy([
                 ['current_year', 'desc'],
-                ['current_semester', 'desc'],
                 ['session_start_year', 'asc'],
                 ['calculated_score', 'desc'],
             ]);
@@ -101,7 +100,6 @@ class ExportData extends Command
                     $user->gpa_4_year ? number_format((float)$user->gpa_4_year, 3, '.', '') : null,
                     $user->last_highest_gpa ? number_format((float)$user->last_highest_gpa, 3, '.', '') : null,
                     $user->current_year,
-                    $user->current_semester ?? '',
                     $user->calculated_score, // Using the property we created in step 2
                     $user->bill->payment_status,
                 ]);
