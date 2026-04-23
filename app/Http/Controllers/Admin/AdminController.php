@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\UserDetails;
 use App\Models\Bill;
+use App\Models\Setting;
 
 class AdminController extends Controller
 {
@@ -56,7 +57,8 @@ class AdminController extends Controller
             ->orderBy('total_applications', 'desc')
             ->get();
 
-        return view('admin.dashboard', compact('hallStats'));
+        $settings = Setting::all()->pluck('value', 'key')->toArray();
+        return view('admin.dashboard', compact('hallStats', 'settings'));
     }
 
     public function logout(Request $request)

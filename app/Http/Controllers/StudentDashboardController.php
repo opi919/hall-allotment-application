@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Bill;
 use App\Models\Department;
 use App\Models\Hall;
+use App\Models\Setting;
 use App\Models\UserDetails;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
@@ -19,6 +21,7 @@ class StudentDashboardController extends Controller
     //add middleware to check if user is authenticated
     public function __construct()
     {
+        $this->checkEndDate();
         $this->middleware('allowApplication')->except(['index', 'downloadForm']);
     }
 
@@ -434,5 +437,17 @@ class StudentDashboardController extends Controller
         $mpdf->WriteHTML($html);
 
         return $mpdf->Output('application-form.pdf', 'D'); // Download
+    }
+
+    private function checkEndDate()
+    {
+        $endDate = Setting::where('key', 'end_date')->first();
+        if (!$endDate) {
+            return;
+        }
+        if (now()->greaterThan(Carbon::parse($endDate->value))) {
+            Setting::where('key', 'allow_application')->update(['value' => '0']);
+        }
+        return;
     }
 }
