@@ -167,7 +167,7 @@
                 @endif
             @endforeach
         @elseif($details->academic_system == 'semester')
-            @foreach ([1, 2, 3, 4, 5, 6, 8] as $semester)
+            @foreach ([1, 2, 3, 4, 5, 6, 7, 8] as $semester)
                 @if ($details->{'semester_' . $semester . '_gpa'})
                     <tr>
                         <td>{{ $semester }}{{ $semester == 1 ? 'st' : ($semester == 2 ? 'nd' : ($semester == 3 ? 'rd' : 'th')) }}
