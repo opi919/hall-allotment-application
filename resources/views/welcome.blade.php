@@ -383,7 +383,7 @@
                 // send date in YYYY-MM-DD and construct end-of-day on client to avoid timezone/parsing issues
                 const endDateStr = @json(\Carbon\Carbon::parse($settings['end_date'])->toDateString()); // e.g. "2026-04-24"
                 const edParts = endDateStr.split('-').map(Number);
-                const endTs = new Date(edParts[0], edParts[1] - 1, edParts[2], 0, 0, 0, 0).getTime();
+                const endTs = new Date(edParts[0], edParts[1] - 1, edParts[2], 23, 59, 59, 999).getTime();
             @else
                 return;
             @endif
