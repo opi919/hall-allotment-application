@@ -117,7 +117,7 @@ class ExportData extends Command
                     $user->session,
                     $user->calculated_score, // Using the property we created in step 2
                     $user->current_year == 5 ? 'Masters' : $user->current_year . ($user->current_year == 1 ? 'st' : ($user->current_year == 2 ? 'nd' : ($user->current_year == 3 ? 'rd' : 'th'))) . ' Year',
-                    $user->current_semester ?? $user->current_semester . ($user->current_semester == 1 ? 'st' : ($user->current_semester == 2 ? 'nd' : 'th')) . ' Semester',
+                    $user->current_semester ? $user->current_semester . ($user->current_semester == 1 ? 'st' : ($user->current_semester == 2 ? 'nd' : ($user->current_semester == 3 ? 'rd' : 'th'))) . ' Semester' : null,
                     $user->bill->payment_status == 1 ? 'Paid' : null,
                     $user->relatives_in_rajshahi == 'yes' ? 'Yes' : 'No',
                     $user->is_home_in_rajshahi == 'yes' ? 'Yes' : 'No',
