@@ -48,7 +48,7 @@ class ExportData extends Command
             } else {
                 $users = UserDetails::with('bill')->where('hall_name', $hall->name)->get();
             }
-            $headers = ['ID', 'Name', 'Father\'s Name', 'Department', 'Hall', 'Mobile', 'Present Address', 'Permanent Address', '1st Year GPA', '2nd Year GPA', '3rd Year GPA', '4th Year GPA', 'Highest GPA', 'Session', 'Score', 'Current Year', 'Current Semester', 'Payment Status','Relatives residing in Rajshahi','Home Located in Rajshahi City Corporation','Emergency Contact Name','Emergency Contact Relation','Emergency Contact Mobile'];
+            $headers = ['ID', 'Name', 'Father\'s Name', 'Department', 'Hall', 'Mobile', 'Present Address', 'Permanent Address', '1st Year GPA', '2nd Year GPA', '3rd Year GPA', '4th Year GPA', 'Highest GPA', 'Session', 'Score', 'Current Year', 'Current Semester', 'Payment Status', 'Relatives residing in Rajshahi', 'Home Located in Rajshahi City Corporation', 'Emergency Contact Name', 'Emergency Contact Relation', 'Emergency Contact Mobile'];
 
             $writer = SimpleExcelWriter::create($filename)
                 ->addHeader($headers);
@@ -116,14 +116,14 @@ class ExportData extends Command
                     $user->last_highest_gpa ? number_format((float)$user->last_highest_gpa, 3, '.', '') : null,
                     $user->session,
                     $user->calculated_score, // Using the property we created in step 2
-                    $user->current_year == 5 ? 'Masters' : $user->current_year,
-                    $user->current_semester . ($user->current_semester == 1 ? 'st' : ($user->current_semester == 2 ? 'nd' : 'th')) . ' Semester',
+                    $user->current_year == 5 ? 'Masters' : $user->current_year . ($user->current_year == 1 ? 'st' : ($user->current_year == 2 ? 'nd' : ($user->current_year == 3 ? 'rd' : 'th'))) . ' Year',
+                    $user->current_semester ?? $user->current_semester . ($user->current_semester == 1 ? 'st' : ($user->current_semester == 2 ? 'nd' : 'th')) . ' Semester',
                     $user->bill->payment_status == 1 ? 'Paid' : null,
                     $user->relatives_in_rajshahi == 'yes' ? 'Yes' : 'No',
                     $user->is_home_in_rajshahi == 'yes' ? 'Yes' : 'No',
                     $user->emergency_contact_name,
                     $user->emergency_contact_relation,
-                    $user->emergency_contact_mobile,
+                    $user->emergency_contact_no,
                 ]);
             }
 
