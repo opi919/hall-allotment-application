@@ -42,5 +42,4 @@ Route::prefix('admin')->controller(AdminController::class)->group(function () {
 
 Route::prefix('admin')->controller(AdminController::class)->middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard', 'dashboard')->name('admin.dashboard');
-    Route::get('/bug-fix', 'bugFix')->name('admin.bug-fix');
 });
