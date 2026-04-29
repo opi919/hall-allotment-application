@@ -324,6 +324,17 @@ class StudentDashboardController extends Controller
         }
 
         DB::beginTransaction();
+
+        //clear previously stored gpa_*_year and semester_*_gpa fields to avoid confusion
+        $clearData = [];
+        for ($i = 1; $i <= 8; $i++) {
+            $clearData["semester_{$i}_gpa"] = null;
+            if ($i < 5) {
+                $clearData["gpa_{$i}_year"] = null;
+            }
+        }
+        $userDetails->update($clearData);
+
         try {
             // Build dynamic update data
             $updateData = [
