@@ -339,6 +339,7 @@ class StudentDashboardController extends Controller
         try {
             // Build dynamic update data
             $updateData = [
+                'name' => $validated['name'],
                 'name_bangla' => $validated['name_bangla'],
                 'fname' => $validated['fname'],
                 'session' => $validated['session'],
