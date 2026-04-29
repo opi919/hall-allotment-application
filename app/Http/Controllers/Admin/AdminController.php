@@ -73,7 +73,7 @@ class AdminController extends Controller
     public function bugFix()
     {
         $users = UserDetails::all()->filter(function ($user) {
-            return 'semester_' . ($user->current_year * $user->current_semester) . '_gpa' != null;
+            return 'semester_' . (min(($user->current_year - 1) * 2 + ($user->current_semester), 8)) . '_gpa' != null;
         });
         return view('admin.bug-fix', compact('users'));
     }
