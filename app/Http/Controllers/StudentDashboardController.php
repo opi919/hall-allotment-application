@@ -231,6 +231,7 @@ class StudentDashboardController extends Controller
 
         // Base validation rules
         $rules = [
+            'name' => 'required|string|max:255',
             'name_bangla' => 'required|regex:/^[\p{Bengali}\s\(\)\-\,\.\।_]+$/u',
             'fname' => 'required',
             'session' => 'required',
