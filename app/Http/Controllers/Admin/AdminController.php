@@ -69,4 +69,12 @@ class AdminController extends Controller
 
         return redirect()->route('admin.login')->with('success', 'You have been logged out.');
     }
+
+    public function bugFix()
+    {
+        $users = UserDetails::all()->filter(function ($user) {
+            return 'semester_' . ($user->current_year * $user->current_semester) . '_gpa' != null;
+        });
+        return view('admin.bug-fix', compact('users'));
+    }
 }
