@@ -74,10 +74,18 @@ class AdminController extends Controller
     {
         $users = UserDetails::all()->filter(function ($user) {
             $attributeName = 'semester_' . (min(($user->current_year - 1) * 2 + ($user->current_semester ?? 0), 8)) . '_gpa';
-            return $user->{$attributeName} != null && $user->current_year < 5;
+            return ($user->{$attributeName} != null || $user->{'gpa_' . $user->current_year . 'year'} != null) && $user->current_year < 5;
         })->values();
 
-        //
+        // foreach ($users as $user) {
+        //     for ($i = min(($user->current_year - 1) * 2 + ($user->current_semester ?? 0), 8); $i <= 8; $i++) {
+        //         $user->{'semester_' . $i . '_gpa'} = null;
+        //     }
+        //     $user->save();
+        // }
+
+        //recalculate gpa_*_year
+
         return view('admin.bug-fix', compact('users'));
     }
 }
