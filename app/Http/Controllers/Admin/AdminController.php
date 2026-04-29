@@ -77,14 +77,27 @@ class AdminController extends Controller
             return ($user->{$attributeName} != null || $user->{'gpa_' . $user->current_year . 'year'} != null) && $user->current_year < 5;
         })->values();
 
-        // foreach ($users as $user) {
-        //     for ($i = min(($user->current_year - 1) * 2 + ($user->current_semester ?? 0), 8); $i <= 8; $i++) {
-        //         $user->{'semester_' . $i . '_gpa'} = null;
-        //     }
-        //     $user->save();
-        // }
+        foreach ($users as $user) {
+            $currentYear = $user->current_year;
+            $currentSemester = $user->current_semester;
+            $lastSemester = min(($currentYear - 1) * 2 + ($currentSemester ?? 0), 8);
+            for ($i = $lastSemester; $i <= 8; $i++) {
+                $user->{'semester_' . $i . '_gpa'} = null;
+            }
 
-        //recalculate gpa_*_year
+            $completedSemesters = min(($currentYear - 1) * 2 + ($currentSemester - 1), 8);
+            for ($i = 1; $i <= $completedSemesters; $i++) {
+                if ($i % 2 == 0) {
+                    $year = $i / 2;
+                    $user->{'gpa_' . $year . 'year'} = round(($user->{'semester_' . ($i - 1) . '_gpa'} + $user->{'semester_' . $i . '_gpa'}) / 2, 3);
+                }
+                elseif($i == $completedSemesters && $currentSemester == 2){
+                    $year = ceil($i / 2);
+                    $user->{'gpa_' . $year . 'year'} = round($user->{'semester_' . $i . '_gpa'}, 3);
+                }
+            }
+            $user->save();
+        }
 
         return view('admin.bug-fix', compact('users'));
     }
