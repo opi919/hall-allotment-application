@@ -28,7 +28,7 @@ class CalculateGPA extends Command
     {
         $users = UserDetails::all();
 
-        $this->output->progressBarStart(count($users));
+        $this->output->progressStart(count($users));
         foreach ($users as $user) {
             if ($user->academic_system == 'semester') {
                 $user->gpa_1_year = null;
@@ -51,8 +51,8 @@ class CalculateGPA extends Command
                 }
                 $user->save();
             }
-            $this->output->progressBarAdvance();
+            $this->output->progressAdvance();
         }
-        $this->output->progressBarFinish();
+        $this->output->progressFinish();
     }
 }
