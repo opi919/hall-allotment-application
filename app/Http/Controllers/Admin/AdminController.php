@@ -89,11 +89,11 @@ class AdminController extends Controller
             for ($i = 1; $i <= $completedSemesters; $i++) {
                 if ($i % 2 == 0) {
                     $year = $i / 2;
-                    $user->{'gpa_' . $year . 'year'} = round(($user->{'semester_' . ($i - 1) . '_gpa'} + $user->{'semester_' . $i . '_gpa'}) / 2, 3);
+                    $user->{'gpa_' . $year . '_year'} = round(($user->{'semester_' . ($i - 1) . '_gpa'} + $user->{'semester_' . $i . '_gpa'}) / 2, 3);
                 }
                 elseif($i == $completedSemesters && $currentSemester == 2){
                     $year = ceil($i / 2);
-                    $user->{'gpa_' . $year . 'year'} = round($user->{'semester_' . $i . '_gpa'}, 3);
+                    $user->{'gpa_' . $year . '_year'} = round($user->{'semester_' . $i . '_gpa'}, 3);
                 }
             }
             $user->save();
