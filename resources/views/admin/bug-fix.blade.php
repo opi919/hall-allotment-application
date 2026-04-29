@@ -13,7 +13,8 @@
         <ul>
             @foreach ($users as $user)
                 <li>{{ $user->username }}: Year: {{ $user->current_year }}, Semester: {{ $user->current_semester }}, GPA:
-                    {{ $user->{'semester_' . $user->current_year * $user->current_semester . '_gpa'} }}</li>
+                    {{ $user->{'semester_' . min(($user->current_year - 1) * 2 + $user->current_semester, 8) . '_gpa'} }}
+                </li>
             @endforeach
         </ul>
     @endif
