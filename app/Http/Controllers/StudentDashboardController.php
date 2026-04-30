@@ -458,7 +458,7 @@ class StudentDashboardController extends Controller
         if (!$endDate) {
             return;
         }
-        if (now()->greaterThan(Carbon::parse($endDate->value)->addDay())) {
+        if (now()->greaterThan(Carbon::parse($endDate->value)->addDay()) && Setting::where('key', 'allow_application')->first()->value == '1') {
             Setting::where('key', 'allow_application')->update(['value' => '0']);
         }
         return;
